@@ -44,7 +44,7 @@ export default function Navbar() {
             <li key={link.href}>
               <a
                 href={link.href}
-                className="px-4 py-2 text-sm font-medium text-[#64748B] hover:text-[#2563EB] transition-colors rounded-xl hover:bg-blue-50/60"
+                className="px-4 py-2 text-sm font-medium text-[#64748B] hover:text-[#2563EB] transition-colors rounded-xl hover:bg-[#E8E9FF]/60"
               >
                 {link.label}
               </a>
@@ -56,7 +56,7 @@ export default function Navbar() {
         <div className="hidden lg:flex items-center gap-3">
           <a
             href="#contact"
-            className="btn-primary px-6 py-2.5 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+            className="btn-primary px-6 py-2.5 bg-gradient-to-r from-[#2563EB] to-[#9FA1FF] text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
           >
             Get Started
           </a>
@@ -88,7 +88,7 @@ export default function Navbar() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="px-4 py-3 text-sm font-medium text-[#0F172A] hover:text-[#2563EB] hover:bg-blue-50 rounded-xl transition-colors"
+                  className="px-4 py-3 text-sm font-medium text-[#0F172A] hover:text-[#2563EB] hover:bg-[#E8E9FF]/60 rounded-xl transition-colors"
                 >
                   {link.label}
                 </a>
@@ -96,7 +96,7 @@ export default function Navbar() {
               <a
                 href="#contact"
                 onClick={() => setMobileOpen(false)}
-                className="mt-2 px-6 py-3 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white text-sm font-semibold rounded-xl text-center shadow-lg shadow-blue-500/25"
+                className="mt-2 px-6 py-3 bg-gradient-to-r from-[#2563EB] to-[#9FA1FF] text-white text-sm font-semibold rounded-xl text-center shadow-lg shadow-blue-500/20"
               >
                 Get Started
               </a>

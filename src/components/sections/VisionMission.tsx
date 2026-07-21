@@ -27,10 +27,10 @@ const combinedItems = [
     type: "vision" as const,
     icon: "Eye",
     title: "Our Vision",
-    subtitle: "To be the #1 Digital Learning Ecosystem in Southeast Asia",
+    subtitle: "To be the Top Software Development Agency in Southeast Asia",
     description:
-      "We envision a world where every person, regardless of background, has access to world-class digital education that unlocks their full potential and drives economic growth across the region.",
-    tags: ["Inclusive Access", "World-Class Quality", "Regional Impact"],
+      "We envision a digital landscape where businesses of all sizes can leverage robust, scalable, and premium IT solutions to accelerate their growth and dominate their respective markets.",
+    tags: ["Scalable Tech", "World-Class Quality", "Enterprise Solutions"],
   },
   ...missionItems.map((item) => ({
     type: "mission" as const,
@@ -44,16 +44,11 @@ const combinedItems = [
 
 export default function VisionMission() {
   return (
-    <section id="vision-mission" className="pt-16 pb-24 lg:pt-20 lg:pb-32 bg-[#F8FAFC]">
-      <div className="section-container">
-
-
-
-        {/* ══════════════════════════════════════
-            VISION & MISSION — Unified Scroll Story
-        ══════════════════════════════════════ */}
-        <VisionMissionScroll />
-      </div>
+    <section id="vision-mission" className="bg-[#F8FAFC]">
+      {/* ══════════════════════════════════════
+          VISION & MISSION — Unified Scroll Story
+      ══════════════════════════════════════ */}
+      <VisionMissionScroll />
     </section>
   );
 }
@@ -75,10 +70,28 @@ function VisionMissionScroll() {
 
   return (
     <div ref={containerRef} className="relative mt-8 h-[450vh] w-full">
-      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden">
+      <div className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden bg-[#F8FAFC]">
+        {/* Dynamic Glowing Background Orbs */}
+        <div className={`absolute -top-[10%] -right-[10%] w-[60vw] h-[60vw] rounded-full blur-[120px] transition-all duration-1000 pointer-events-none ${
+          combinedItems[activeIndex].type === "vision" ? "bg-[#9FA1FF]/20" : "bg-[#2563EB]/10"
+        }`} />
+        <div className={`absolute -bottom-[10%] -left-[10%] w-[60vw] h-[60vw] rounded-full blur-[120px] transition-all duration-1000 pointer-events-none ${
+          combinedItems[activeIndex].type === "vision" ? "bg-[#2563EB]/10" : "bg-[#2563EB]/15"
+        }`} />
+        
+        {/* Abstract Dotted Pattern */}
+        <div 
+          className="absolute inset-0 pointer-events-none opacity-[0.03]"
+          style={{ backgroundImage: 'radial-gradient(#0F172A 1px, transparent 1px)', backgroundSize: '48px 48px' }}
+        />
+
         {/* Dynamic Watermark Text */}
-        <div className="absolute inset-0 opacity-[0.015] pointer-events-none flex items-center justify-center transition-all duration-700">
-          <span className="text-[18vw] font-black uppercase text-blue-900 select-none tracking-tighter">
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center transition-all duration-700">
+          <span className={`text-[18vw] font-black uppercase select-none tracking-tighter text-transparent bg-clip-text bg-gradient-to-b transition-colors duration-1000 ${
+            combinedItems[activeIndex].type === "vision" 
+              ? "from-[#9FA1FF]/30 to-[#F8FAFC]" 
+              : "from-slate-300/60 to-[#F8FAFC]"
+          }`}>
             {combinedItems[activeIndex].type === "vision" ? "Vision" : "Mission"}
           </span>
         </div>
@@ -87,8 +100,8 @@ function VisionMissionScroll() {
         <div className="mb-6 text-center z-10 relative">
           <span className={`inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest border transition-all duration-300 ${
             combinedItems[activeIndex].type === "vision"
-              ? "bg-indigo-50 text-indigo-600 border-indigo-100"
-              : "bg-blue-50 text-[#2563EB] border-blue-100"
+              ? "bg-violet-50 text-[#9FA1FF] border-violet-100"
+              : "bg-teal-50 text-[#2563EB] border-teal-100"
           }`}>
             {combinedItems[activeIndex].type === "vision" ? "Our Vision" : `Our Mission — 0${activeIndex}`}
           </span>
@@ -112,7 +125,7 @@ function VisionMissionScroll() {
                     className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 sm:p-12"
                   >
                     {/* Glowing circular icon wrapper for Vision */}
-                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-2xl shadow-indigo-500/30 mb-8 text-white shrink-0">
+                    <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#9FA1FF] to-[#2563EB] flex items-center justify-center shadow-2xl shadow-violet-500/30 mb-8 text-white shrink-0">
                       {Icon && <Icon size={36} />}
                     </div>
                     
@@ -129,7 +142,7 @@ function VisionMissionScroll() {
                       {item.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="px-3 py-1 rounded-lg bg-indigo-50/80 text-indigo-600 text-xs font-semibold border border-indigo-100/50"
+                          className="px-3 py-1 rounded-lg bg-violet-50/80 text-[#9FA1FF] text-xs font-semibold border border-violet-100/50"
                         >
                           {tag}
                         </span>
@@ -149,7 +162,7 @@ function VisionMissionScroll() {
                   transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 sm:p-12"
                 >
-                  <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#1D4ED8] flex items-center justify-center shadow-2xl shadow-blue-500/30 mb-8 text-white shrink-0">
+                  <div className="w-20 h-20 rounded-3xl bg-gradient-to-br from-[#2563EB] to-[#2563EB] flex items-center justify-center shadow-2xl shadow-teal-500/25 mb-8 text-white shrink-0">
                     {Icon && <Icon size={36} />}
                   </div>
                   <h4 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] mb-6">
@@ -172,8 +185,8 @@ function VisionMissionScroll() {
               className={`h-2.5 rounded-full transition-all duration-500 ${
                 index === activeIndex
                   ? item.type === "vision"
-                    ? "w-10 bg-indigo-600"
-                    : "w-10 bg-[#2563EB]"
+                    ? "w-10 bg-[#9FA1FF]"
+                    : "w-10 bg-[#D9F9DF]"
                   : "w-2.5 bg-gray-200"
               }`}
             />

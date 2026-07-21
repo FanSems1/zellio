@@ -4,7 +4,7 @@ import Hero from "@/components/sections/Hero";
 
 import About from "@/components/sections/About";
 import VisionMission from "@/components/sections/VisionMission";
-import Training from "@/components/sections/Training";
+import Services from "@/components/sections/Services";
 import WhyChoose from "@/components/sections/WhyChoose";
 
 import Testimonials from "@/components/sections/Testimonials";
@@ -21,7 +21,7 @@ export default function Home() {
 
         <About />
         <VisionMission />
-        <Training />
+        <Services />
         <WhyChoose />
 
         <Testimonials />

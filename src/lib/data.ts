@@ -1,112 +1,112 @@
 // ============================================================
-// DIGIFORE – Site Data
+// DIGIFORE – IT Services & Software House Site Data
 // ============================================================
 
 export const navLinks = [
   { label: "Home", href: "#home" },
-  { label: "About Digifore", href: "#about" },
-  { label: "Vision & Mission", href: "#vision-mission" },
-  { label: "Training", href: "#training" },
+  { label: "About Us", href: "#about" },
+  { label: "Services", href: "#services" },
+  { label: "Why Us", href: "#why-choose" },
   { label: "Contact", href: "#contact" },
 ];
 
 export const trustedCompanies = [
-  { name: "Google", abbrev: "G" },
-  { name: "Microsoft", abbrev: "M" },
-  { name: "Amazon", abbrev: "AWS" },
-  { name: "Meta", abbrev: "Meta" },
   { name: "Tokopedia", abbrev: "TP" },
   { name: "Gojek", abbrev: "GJ" },
   { name: "Traveloka", abbrev: "TV" },
   { name: "Bank BRI", abbrev: "BRI" },
+  { name: "Bank BCA", abbrev: "BCA" },
+  { name: "Pertamina", abbrev: "PTM" },
+  { name: "Telkomsel", abbrev: "TKM" },
+  { name: "Astra", abbrev: "AST" },
 ];
 
 export const stats = [
-  { value: 500, suffix: "+", label: "Training Programs" },
-  { value: 95, suffix: "%", label: "Customer Satisfaction" },
-  { value: 100, suffix: "+", label: "Corporate Clients" },
-  { value: 10, suffix: "+", label: "Years Experience" },
+  { value: 150, suffix: "+", label: "Projects Delivered" },
+  { value: 98, suffix: "%", label: "Client Satisfaction" },
+  { value: 50, suffix: "+", label: "Enterprise Clients" },
+  { value: 8, suffix: "+", label: "Years Experience" },
 ];
 
 export const missionItems = [
   {
     icon: "Target",
-    title: "Skill-Focused Learning",
+    title: "Client-Centric Solutions",
     description:
-      "We design every curriculum with real industry skills in mind, ensuring learners gain practical knowledge applicable to their roles.",
+      "We design and build every system tailored specifically to your business flow and strategic requirements.",
   },
   {
     icon: "Globe",
-    title: "Accessible for Everyone",
+    title: "Global Coding Standards",
     description:
-      "From individuals to enterprises, our training programs are accessible online and offline to reach every learner across Indonesia.",
+      "Our team adheres to strict international coding standards, ensuring highly clean, maintainable, and scalable codebases.",
   },
   {
     icon: "Award",
-    title: "Industry-Recognized Certifications",
+    title: "High-Performance Systems",
     description:
-      "Partner with world-class certification bodies to offer credentials that are recognized by top employers globally.",
+      "We don't settle for slow. We build custom websites, dashboards, and enterprise platforms optimized for speed and high traffic.",
   },
   {
     icon: "Users",
-    title: "Community & Collaboration",
+    title: "Expert Tech Engineers",
     description:
-      "Build a thriving community of professionals who collaborate, share knowledge, and grow together in the digital era.",
+      "Our squad consists of top-tier full-stack developers, UI/UX designers, and cloud architects working dedicatedly for your project.",
   },
   {
     icon: "TrendingUp",
-    title: "Continuous Innovation",
+    title: "Continuous Tech Innovation",
     description:
-      "Constantly evolving our content and delivery methods to keep pace with the rapidly changing digital landscape.",
+      "We constantly adopt the latest tech stacks and security patches to keep your digital infrastructure ahead of competitors.",
   },
 ];
 
-export const trainingPrograms = [
+export const servicesData = [
   {
     id: 1,
-    category: "Design",
-    icon: "Palette",
-    title: "UI/UX Design",
-    description:
-      "Master user interface and experience design. Learn Figma, design systems, prototyping, and usability testing.",
-    duration: "3 Months",
-    level: "Beginner to Advanced",
-    color: "#8B5CF6",
-    bgColor: "#EDE9FE",
-  },
-  {
-    id: 2,
-    category: "Frontend",
+    category: "Web & Apps",
     icon: "Monitor",
-    title: "Frontend Development",
+    title: "Custom Web Development",
     description:
-      "Build modern, responsive web applications using React, Next.js, TypeScript, and TailwindCSS.",
-    duration: "4 Months",
-    level: "Intermediate",
+      "Modern, fast, and SEO-friendly corporate websites, landing pages, and web portals built with React and Next.js.",
+    duration: "4-8 Weeks",
+    level: "Premium",
     color: "#2563EB",
     bgColor: "#DBEAFE",
   },
   {
-    id: 3,
-    category: "Backend",
-    icon: "Server",
-    title: "Backend Development",
+    id: 2,
+    category: "Dashboard",
+    icon: "BarChart2",
+    title: "Admin & Analytics Dashboards",
     description:
-      "Develop robust server-side applications using Node.js, Python, PostgreSQL, and REST/GraphQL APIs.",
-    duration: "4 Months",
-    level: "Intermediate",
-    color: "#059669",
-    bgColor: "#D1FAE5",
+      "Interactive data dashboards, custom CRM/ERP interfaces, and business intelligence panels with real-time analytics.",
+    duration: "6-10 Weeks",
+    level: "Enterprise",
+    color: "#0284C7",
+    bgColor: "#E0F2FE",
+  },
+  {
+    id: 3,
+    category: "Mobile",
+    icon: "Smartphone",
+    title: "Mobile App Development",
+    description:
+      "Native-grade Android and iOS applications developed using Flutter and React Native for a seamless user experience.",
+    duration: "8-12 Weeks",
+    level: "Premium",
+    color: "#16A34A",
+    bgColor: "#DCFCE7",
   },
   {
     id: 4,
-    category: "Fullstack",
+    category: "Enterprise",
     icon: "Layers",
-    title: "Fullstack Development",
+    title: "Custom IT Systems",
     description:
-      "End-to-end web development from frontend to backend, databases, and deployment on cloud infrastructure.",
-    duration: "6 Months",
-    level: "Advanced",
+      "Robust backend architectures, custom database designs, integration of third-party APIs, and legacy system migrations.",
+    duration: "10-16 Weeks",
+    level: "Enterprise",
     color: "#D97706",
     bgColor: "#FEF3C7",
   },
@@ -114,187 +114,145 @@ export const trainingPrograms = [
     id: 5,
     category: "Cloud",
     icon: "Cloud",
-    title: "Cloud Computing",
+    title: "Cloud Infrastructure & DevOps",
     description:
-      "AWS, Google Cloud, and Azure fundamentals. Architecture, deployment, and cloud security best practices.",
-    duration: "3 Months",
-    level: "Intermediate",
+      "Reliable AWS, GCP, or Azure setup, Docker containerization, Kubernetes orchestration, and continuous integration (CI/CD) pipelines.",
+    duration: "2-4 Weeks",
+    level: "Enterprise",
     color: "#06B6D4",
     bgColor: "#CFFAFE",
   },
   {
     id: 6,
-    category: "DevOps",
-    icon: "GitBranch",
-    title: "DevOps Engineering",
+    category: "Design",
+    icon: "Palette",
+    title: "UI/UX & Product Design",
     description:
-      "CI/CD pipelines, Docker, Kubernetes, infrastructure as code, monitoring, and site reliability engineering.",
-    duration: "4 Months",
-    level: "Advanced",
-    color: "#DC2626",
-    bgColor: "#FEE2E2",
-  },
-  {
-    id: 7,
-    category: "Security",
-    icon: "Shield",
-    title: "Cyber Security",
-    description:
-      "Network security, ethical hacking, penetration testing, SIEM, and security compliance frameworks.",
-    duration: "4 Months",
-    level: "Advanced",
-    color: "#7C3AED",
-    bgColor: "#EDE9FE",
-  },
-  {
-    id: 8,
-    category: "AI",
-    icon: "Brain",
-    title: "Artificial Intelligence",
-    description:
-      "Machine learning, deep learning, NLP, computer vision, and deploying AI models to production.",
-    duration: "5 Months",
-    level: "Advanced",
-    color: "#DB2777",
-    bgColor: "#FCE7F3",
-  },
-  {
-    id: 9,
-    category: "Data",
-    icon: "BarChart2",
-    title: "Data Science",
-    description:
-      "Data analysis, visualization, statistical modeling, Python, SQL, Tableau, and business intelligence.",
-    duration: "4 Months",
-    level: "Intermediate",
-    color: "#0284C7",
-    bgColor: "#E0F2FE",
-  },
-  {
-    id: 10,
-    category: "Mobile",
-    icon: "Smartphone",
-    title: "Mobile Development",
-    description:
-      "Build cross-platform mobile apps with React Native and Flutter for iOS and Android platforms.",
-    duration: "4 Months",
-    level: "Intermediate",
-    color: "#16A34A",
-    bgColor: "#DCFCE7",
-  },
-];
-
-export const whyChooseItems = [
-  {
-    icon: "GraduationCap",
-    title: "Certified Trainers",
-    description:
-      "All instructors hold industry-recognized certifications and bring real-world experience to every session.",
-    color: "#2563EB",
-    bgColor: "#DBEAFE",
-  },
-  {
-    icon: "Code2",
-    title: "Hands-on Practice",
-    description:
-      "Learn by building. Every program includes live projects, labs, and capstone assignments.",
-    color: "#06B6D4",
-    bgColor: "#CFFAFE",
-  },
-  {
-    icon: "BookOpen",
-    title: "Industry Curriculum",
-    description:
-      "Content co-designed with industry experts and updated quarterly to reflect market demands.",
-    color: "#22C55E",
-    bgColor: "#DCFCE7",
-  },
-  {
-    icon: "BadgeCheck",
-    title: "Official Certificate",
-    description:
-      "Earn internationally recognized certificates that open doors at top companies worldwide.",
+      "Figma mockups, user research, wireframing, custom design systems, and rapid prototyping to wow your target users.",
+    duration: "3-6 Weeks",
+    level: "Premium",
     color: "#8B5CF6",
     bgColor: "#EDE9FE",
   },
 ];
 
-export const learningSteps = [
+// Fallback export to prevent broken imports during refactoring
+export const trainingPrograms = servicesData;
+
+export const whyChooseItems = [
   {
-    step: 1,
-    title: "Registration",
-    description: "Sign up and choose your program",
-    icon: "ClipboardList",
+    icon: "Code2",
+    title: "Elite Developers",
+    description:
+      "Our developers write clean, maintainable, and well-documented code using modern React, Node, and TypeScript ecosystems.",
+    color: "#2563EB",
+    bgColor: "#DBEAFE",
   },
   {
-    step: 2,
-    title: "Consultation",
-    description: "Talk with our learning advisors",
+    icon: "Cpu",
+    title: "Cutting-Edge Tech Stack",
+    description:
+      "We build on fast, lightweight frameworks like Next.js, TailwindCSS, Node.js, and Postgres to ensure peak performance.",
+    color: "#06B6D4",
+    bgColor: "#CFFAFE",
+  },
+  {
+    icon: "ShieldAlert",
+    title: "Robust Security Standards",
+    description:
+      "We implement data encryption, secure auth (OAuth/JWT), sanitization, and run security tests before final deployment.",
+    color: "#22C55E",
+    bgColor: "#DCFCE7",
+  },
+  {
+    icon: "CalendarCheck",
+    title: "Agile & On-Time Delivery",
+    description:
+      "We deliver in milestones using Scrum methodologies, giving you full visibility and ensuring we launch on schedule.",
+    color: "#8B5CF6",
+    bgColor: "#EDE9FE",
+  },
+];
+
+export const developmentProcess = [
+  {
+    step: 1,
+    title: "Consultation & Discovery",
+    description: "Understand your business requirements, user persona, and technical scope.",
     icon: "MessageSquare",
   },
   {
+    step: 2,
+    title: "UI/UX Design",
+    description: "Create interactive Figma prototypes and custom wireframes for your approval.",
+    icon: "Palette",
+  },
+  {
     step: 3,
-    title: "Training",
-    description: "Engage in expert-led sessions",
-    icon: "BookOpen",
+    title: "Development",
+    description: "Agile sprints of clean coding, frontend building, and robust backend integrations.",
+    icon: "Code2",
   },
   {
     step: 4,
-    title: "Assessment",
-    description: "Prove your skills with real tests",
+    title: "QA & Testing",
+    description: "Rigorous performance, security, responsive, and cross-browser testing.",
     icon: "ClipboardCheck",
   },
   {
     step: 5,
-    title: "Certification",
-    description: "Receive your official certificate",
+    title: "Deployment & Support",
+    description: "Cloud deployment, SEO optimization, and 3 months of free maintenance support.",
     icon: "Award",
   },
 ];
+
+// Fallback export
+export const learningSteps = developmentProcess;
 
 export const testimonials = [
   {
     id: 1,
     name: "Rizky Pratama",
-    position: "Senior Frontend Developer",
-    company: "Tokopedia",
+    position: "CTO",
+    company: "FinTech Solutions",
     avatar: "RP",
     rating: 5,
     review:
-      "DIGIFORE's React & Next.js program completely transformed my career. The hands-on projects and mentorship from certified instructors gave me the confidence to land a senior role at a top tech company.",
+      "Digifore built our core payment dashboard. The level of professionalism, clean code, and speed of delivery exceeded our expectations. The real-time tracking graphs load instantly.",
     color: "#2563EB",
   },
   {
     id: 2,
     name: "Sari Dewi Kusuma",
-    position: "UI/UX Designer",
-    company: "Gojek",
+    position: "Product Director",
+    company: "RetailFlow Indonesia",
     avatar: "SD",
     rating: 5,
     review:
-      "The UI/UX Design program is world-class. I went from zero design knowledge to building a full design system used by a product team of 50. The curriculum is practical and deeply industry-aligned.",
+      "We hired them to build our multi-vendor e-commerce platform and admin portal. The system is extremely fast, responsive on mobile, and scales beautifully during high-traffic flash sales.",
     color: "#8B5CF6",
   },
   {
     id: 3,
     name: "Budi Santoso",
-    position: "DevOps Engineer",
-    company: "Bank BCA",
+    position: "CEO",
+    company: "LogiChain Logistics",
     avatar: "BS",
     rating: 5,
     review:
-      "DIGIFORE helped our entire IT team upskill in cloud and DevOps. The corporate training package was flexible, well-structured, and immediately applicable to our infrastructure modernization project.",
+      "Their custom ERP system streamlined our logistics operations. The admin dashboard displays real-time tracking data across 5 provinces flawlessly. Our operational efficiency increased by 30%.",
     color: "#059669",
   },
   {
     id: 4,
     name: "Anisa Rahman",
-    position: "Data Scientist",
-    company: "Traveloka",
+    position: "Co-Founder",
+    company: "EduSpace Platform",
     avatar: "AR",
     rating: 5,
     review:
-      "Outstanding data science curriculum. From Python fundamentals to deploying ML models in production — every concept is taught with industry context. I now lead a team of 8 data engineers.",
+      "They designed and built our SaaS web platform from scratch. The UI/UX is outstanding, and the backend is highly scalable. A truly elite software agency that delivers what they promise.",
     color: "#D97706",
   },
 ];

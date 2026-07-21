@@ -17,23 +17,23 @@ const footerLinks = {
     { label: "Careers", href: "#" },
     { label: "Press", href: "#" },
   ],
-  Training: [
-    { label: "UI/UX Design", href: "#training" },
-    { label: "Frontend Dev", href: "#training" },
-    { label: "Cloud Computing", href: "#training" },
-    { label: "Data Science", href: "#training" },
-    { label: "Cyber Security", href: "#training" },
+  Services: [
+    { label: "UI/UX Design", href: "#services" },
+    { label: "Custom Web Dev", href: "#services" },
+    { label: "Admin Dashboards", href: "#services" },
+    { label: "Mobile Apps", href: "#services" },
+    { label: "Enterprise Systems", href: "#services" },
   ],
   Resources: [
     { label: "Blog", href: "#" },
-    { label: "Learning Guides", href: "#" },
     { label: "Case Studies", href: "#" },
-    { label: "FAQs", href: "#" },
-    { label: "Community", href: "#" },
+    { label: "Client Portal", href: "#" },
+    { label: "FAQs", href: "#faq" },
+    { label: "System Status", href: "#" },
   ],
   Contact: [
     { label: "Get in Touch", href: "#contact" },
-    { label: "Corporate Training", href: "#contact" },
+    { label: "Request a Quote", href: "#contact" },
     { label: "Partnerships", href: "#" },
     { label: "Support Center", href: "#" },
     { label: "Privacy Policy", href: "#" },
@@ -62,8 +62,7 @@ export default function Footer() {
               <img src="/digifore.png" alt="Digifore Logo" className="h-9 w-auto object-contain brightness-0 invert group-hover:opacity-90 transition-opacity duration-300" />
             </a>
             <p className="text-[#94A3B8] text-sm leading-relaxed mb-6">
-              Empowering individuals and enterprises through world-class digital
-              learning programs.
+              Empowering businesses through custom software engineering, premium dashboards, and scalable IT systems.
             </p>
             <div className="flex items-center gap-3">
               {socials.map(({ icon: Icon, href, label }) => (

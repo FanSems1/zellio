@@ -9,42 +9,42 @@ const testimonials = [
   {
     id: 1,
     name: "Rizky Pratama",
-    position: "Senior Frontend Developer",
-    company: "Tokopedia",
+    position: "CTO",
+    company: "FinTech Solutions",
     avatar: "/avatar-rizky.png",
     rating: 5,
     review:
-      "DIGIFORE's React & Next.js program completely transformed my career. The hands-on projects and mentorship from certified instructors gave me the confidence to land a senior role at a top tech company.",
+      "Digifore built our core payment dashboard. The level of professionalism, clean code, and speed of delivery exceeded our expectations. The real-time tracking graphs load instantly.",
   },
   {
     id: 2,
     name: "Sari Dewi Kusuma",
-    position: "UI/UX Designer",
-    company: "Gojek",
+    position: "Product Director",
+    company: "RetailFlow Indonesia",
     avatar: "/avatar-sari.png",
     rating: 5,
     review:
-      "The UI/UX Design program is world-class. I went from zero design knowledge to building a full design system used by a product team of 50. The curriculum is practical and deeply industry-aligned.",
+      "We hired them to build our multi-vendor e-commerce platform and admin portal. The system is extremely fast, responsive on mobile, and scales beautifully during high-traffic flash sales.",
   },
   {
     id: 3,
     name: "Budi Santoso",
-    position: "DevOps Engineer",
-    company: "Bank BCA",
+    position: "CEO",
+    company: "LogiChain Logistics",
     avatar: "/avatar-budi.png",
     rating: 5,
     review:
-      "DIGIFORE helped our entire IT team upskill in cloud and DevOps. The corporate training package was flexible, well-structured, and immediately applicable to our infrastructure modernization project.",
+      "Their custom ERP system streamlined our logistics operations. The admin dashboard displays real-time tracking data across 5 provinces flawlessly. Our operational efficiency increased by 30%.",
   },
   {
     id: 4,
     name: "Anisa Rahman",
-    position: "Data Scientist",
-    company: "Traveloka",
+    position: "Co-Founder",
+    company: "EduSpace Platform",
     avatar: "/avatar-anisa.png",
     rating: 5,
     review:
-      "Outstanding data science curriculum. From Python fundamentals to deploying ML models in production — every concept is taught with industry context. I now lead a team of 8 data engineers.",
+      "They designed and built our SaaS web platform from scratch. The UI/UX is outstanding, and the backend is highly scalable. A truly elite software agency that delivers what they promise.",
   },
 ];
 
@@ -74,44 +74,50 @@ export default function Testimonials() {
       <div className="section-container">
         {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 35, scale: 0.95, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-4 border border-blue-100">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-violet-50 text-[#9FA1FF] text-xs font-semibold uppercase tracking-widest mb-4 border border-violet-100">
             Testimonials
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-4">
-            What Our Learners Say
+            What Our Clients Say
           </h2>
           <p className="text-[#64748B] leading-relaxed">
-            Real results from real people who transformed their careers with
-            Digifore.
+            Real results from businesses who scaled their operations with Digifore's IT solutions.
           </p>
         </motion.div>
 
         {/* Main testimonial card */}
-        <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40, scale: 0.96, filter: "blur(12px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+          className="max-w-4xl mx-auto"
+        >
           <AnimatePresence mode="wait" custom={direction}>
             <motion.div
               key={current}
               custom={direction}
-              initial={{ opacity: 0, x: 50 * direction }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -50 * direction }}
-              transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, x: 50 * direction, filter: "blur(4px)" }}
+              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+              exit={{ opacity: 0, x: -50 * direction, filter: "blur(4px)" }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               className="grid md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] rounded-3xl bg-[#F8FAFC] border border-gray-100 overflow-hidden shadow-sm"
             >
               {/* Left — Photo */}
-              <div className="relative h-56 md:h-auto bg-gradient-to-br from-blue-50 to-cyan-50">
+              <div className="relative h-56 md:h-auto md:min-h-[280px] bg-gradient-to-br from-blue-50 to-violet-50">
                 <Image
                   src={t.avatar}
                   alt={t.name}
                   fill
                   className="object-cover"
                   sizes="240px"
+                  unoptimized
                 />
                 {/* Overlay gradient on bottom for mobile */}
                 <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#F8FAFC]/20" />
@@ -122,7 +128,7 @@ export default function Testimonials() {
                 {/* Quote decoration */}
                 <Quote
                   size={48}
-                  className="absolute top-6 right-6 text-blue-100/60 rotate-180"
+                  className="absolute top-6 right-6 text-violet-100/60 rotate-180"
                   fill="currentColor"
                 />
 
@@ -152,6 +158,7 @@ export default function Testimonials() {
                       width={40}
                       height={40}
                       className="object-cover w-full h-full"
+                      unoptimized
                     />
                   </div>
                   <div>
@@ -178,7 +185,7 @@ export default function Testimonials() {
                   }}
                   className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 ${
                     i === current
-                      ? "bg-blue-50 border-blue-200"
+                      ? "bg-violet-50 border-violet-200"
                       : "bg-white border-gray-100 hover:border-gray-200"
                   }`}
                 >
@@ -189,11 +196,12 @@ export default function Testimonials() {
                       width={24}
                       height={24}
                       className="object-cover w-full h-full"
+                      unoptimized
                     />
                   </div>
                   <span
                     className={`text-xs font-medium whitespace-nowrap ${
-                      i === current ? "text-[#2563EB]" : "text-[#64748B]"
+                      i === current ? "text-[#9FA1FF]" : "text-[#64748B]"
                     }`}
                   >
                     {person.name.split(" ")[0]}
@@ -213,7 +221,7 @@ export default function Testimonials() {
                   }}
                   className={`rounded-full transition-all duration-300 ${
                     i === current
-                      ? "w-6 h-2.5 bg-[#2563EB]"
+                      ? "w-6 h-2.5 bg-[#9FA1FF]"
                       : "w-2.5 h-2.5 bg-gray-200"
                   }`}
                   aria-label={`Go to testimonial ${i + 1}`}
@@ -225,21 +233,21 @@ export default function Testimonials() {
             <div className="flex gap-2">
               <button
                 onClick={prev}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB] transition-all shadow-sm"
+                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#B5BAFF] hover:text-[#2563EB] transition-all shadow-sm"
                 aria-label="Previous testimonial"
               >
                 <ChevronLeft size={18} />
               </button>
               <button
                 onClick={next}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#2563EB] hover:text-[#2563EB] transition-all shadow-sm"
+                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#B5BAFF] hover:text-[#2563EB] transition-all shadow-sm"
                 aria-label="Next testimonial"
               >
                 <ChevronRight size={18} />
               </button>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

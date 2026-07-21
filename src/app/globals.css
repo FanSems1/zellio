@@ -3,17 +3,28 @@
 :root {
   --background: #ffffff;
   --foreground: #0F172A;
+
+  /* ── Primary: Blue ── */
   --primary: #2563EB;
   --primary-dark: #1D4ED8;
   --primary-light: #DBEAFE;
-  --secondary: #0F172A;
-  --accent: #06B6D4;
+
+  /* ── Secondary: Lavender ── */
+  --secondary: #9FA1FF;
+  --secondary-dark: #B5BAFF;
+  --secondary-light: #E8E9FF;
+
+  /* ── Tertiary: Soft Mint ── */
+  --tertiary: #D9F9DF;
+  --tertiary-dark: #B8F0C2;
+  --tertiary-light: #EDFDF0;
+
   --success: #22C55E;
   --section-bg: #F8FAFC;
   --muted: #64748B;
   --border: #E2E8F0;
   --card-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.04);
-  --card-shadow-hover: 0 20px 40px -10px rgba(37,99,235,0.15), 0 10px 20px -5px rgba(0,0,0,0.08);
+  --card-shadow-hover: 0 20px 40px -10px rgba(37,99,235,0.12), 0 10px 20px -5px rgba(0,0,0,0.08);
 }
 
 @theme inline {
@@ -124,9 +135,9 @@ body {
   animation-delay: 2s;
 }
 
-/* Gradient text */
+/* Gradient text — blue + lavender flow */
 .gradient-text {
-  background: linear-gradient(135deg, #2563EB 0%, #06B6D4 100%);
+  background: linear-gradient(135deg, #2563EB 0%, #9FA1FF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

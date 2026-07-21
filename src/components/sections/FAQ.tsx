@@ -6,58 +6,60 @@ import { Plus, Minus, MessageCircle, ArrowRight } from "lucide-react";
 
 const faqItems = [
   {
-    q: "Who are Digifore's programs designed for?",
-    a: "Our programs cater to a wide range of learners — from fresh graduates and career-changers to working professionals and corporate teams. Whether you're starting from scratch or advancing your existing skill set, we have a track built for your level.",
-    tag: "Getting Started",
+    q: "What types of software projects do you handle?",
+    a: "We design and build custom web applications, responsive corporate websites, analytics dashboards, mobile applications (iOS/Android), and robust enterprise backend systems.",
+    tag: "Services",
   },
   {
-    q: "Do I need prior experience to enroll?",
-    a: "Not necessarily. Most of our beginner tracks assume zero prior knowledge. For intermediate or advanced programs, we recommend a brief skills assessment during the consultation phase to ensure you're placed in the right cohort.",
-    tag: "Getting Started",
+    q: "What technologies do you use?",
+    a: "We specialize in modern tech stacks, primarily React, Next.js, TypeScript, TailwindCSS, and Node.js for frontend and backend. For databases, we use PostgreSQL and MongoDB, and we host on secure cloud platforms like AWS and GCP.",
+    tag: "Tech Stack",
   },
   {
-    q: "Are classes held online, offline, or both?",
-    a: "We offer full flexibility. You can choose from fully online (live sessions + recorded), fully offline (at our training centers), or a hybrid model. Corporate clients also have the option of on-site training at their premises.",
-    tag: "Getting Started",
+    q: "How long does a typical software project take?",
+    a: "Corporate websites and landing pages usually take 4-6 weeks. Custom admin dashboards and SaaS applications take 8-12 weeks. Large-scale enterprise ERP or custom IT systems can take 12-16+ weeks.",
+    tag: "Timeline",
   },
   {
-    q: "How are the training programs structured?",
-    a: "Each program consists of live instructor-led sessions, self-paced learning modules, hands-on projects, peer collaboration, and a final capstone assessment. The curriculum is reviewed quarterly with industry advisors to keep content relevant.",
-    tag: "Programs",
-  },
-  {
-    q: "Will I receive a certificate after completing a program?",
-    a: "Yes. Upon successful completion and passing the assessment, you'll receive a Digifore certificate recognized by our industry partners. Select programs also prepare you for internationally recognized certifications (AWS, Google Cloud, etc.).",
-    tag: "Programs",
-  },
-  {
-    q: "Can my company enroll a group of employees?",
-    a: "Absolutely. Our Corporate Training package is designed for teams of 5 or more. We offer customized curriculum, dedicated trainers, flexible scheduling, and a company dashboard to track your team's learning progress.",
-    tag: "Corporate",
-  },
-  {
-    q: "How much do your training programs cost?",
-    a: "Pricing varies by program, duration, and delivery format. We offer individual enrollment, team packages, and corporate bundles. Contact us for a tailored quote — we also have scholarship options for qualified applicants.",
+    q: "How do you structure project pricing?",
+    a: "Our pricing is project-based and depends entirely on the technical scope and timeline. After our discovery call, we provide a detailed technical proposal with a fixed-price estimate and transparent milestones.",
     tag: "Pricing",
   },
   {
-    q: "What kind of support will I receive during the program?",
-    a: "You'll have access to dedicated mentors, a private community forum, weekly Q&A sessions, and a personal learning advisor for check-ins. We're committed to your success throughout the entire learning journey.",
+    q: "Do you design the UI/UX as well?",
+    a: "Yes. Every development project includes a dedicated UI/UX design phase in Figma. We create wireframes and high-fidelity prototypes for your approval before we write a single line of code.",
+    tag: "Process",
+  },
+  {
+    q: "Do you provide maintenance and support after launch?",
+    a: "Absolutely. We provide 3 months of free post-launch support to monitor server performance, fix bugs, and ensure everything runs smoothly. Ongoing monthly maintenance retainers are also available.",
     tag: "Support",
   },
   {
-    q: "Is there a refund or trial policy?",
-    a: "We offer a 7-day satisfaction guarantee for individual enrollments. If you're not satisfied within the first week, we'll provide a full refund — no questions asked. Corporate contracts are governed by a separate SLA.",
-    tag: "Pricing",
+    q: "What is your project development methodology?",
+    a: "We work using agile Scrum methodologies. We divide the project into 2-week sprints and hold regular progress reviews. You will also get access to a live staging link to track development progress.",
+    tag: "Process",
+  },
+  {
+    q: "Can you migrate legacy systems to the cloud?",
+    a: "Yes, our team has extensive experience migrating legacy web applications and databases to modern cloud architectures with minimal downtime and zero data loss.",
+    tag: "Services",
+  },
+  {
+    q: "How do we get started with Digifore?",
+    a: "Simply fill out our contact form below or book a kickoff call. We will set up a discovery session to analyze your requirements and provide a technical proposal within 3-5 business days.",
+    tag: "General",
   },
 ];
 
 const tagColors: Record<string, { bg: string; text: string }> = {
-  "Getting Started": { bg: "#EFF6FF", text: "#2563EB" },
-  Programs:         { bg: "#F0FDF4", text: "#16A34A" },
-  Corporate:        { bg: "#FFF7ED", text: "#D97706" },
-  Pricing:          { bg: "#F5F3FF", text: "#7C3AED" },
-  Support:          { bg: "#ECFEFF", text: "#0891B2" },
+  "General":    { bg: "#EFF6FF", text: "#2563EB" },
+  "Services":   { bg: "#CCFBF1", text: "#2563EB" },
+  "Tech Stack": { bg: "#FFF7ED", text: "#D97706" },
+  "Pricing":    { bg: "#EDE9FE", text: "#9FA1FF" },
+  "Process":    { bg: "#E0F2FE", text: "#0284C7" },
+  "Timeline":   { bg: "#FEE2E2", text: "#DC2626" },
+  "Support":    { bg: "#DCFCE7", text: "#16A34A" },
 };
 
 export default function FAQ() {
@@ -69,24 +71,24 @@ export default function FAQ() {
 
         {/* ── Header ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          initial={{ opacity: 0, y: 35, scale: 0.95, filter: "blur(10px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="max-w-2xl mx-auto text-center mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-5 border border-blue-100">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-teal-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-5 border border-teal-100">
             FAQ
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-4">
-            Are we the{" "}
-            <span className="gradient-text">right fit</span> for you?
+            Have questions about{" "}
+            <span className="gradient-text">our workflow</span>?
           </h2>
           <p className="text-[#64748B] leading-relaxed">
-            Everything you need to know before getting started. Can't find the
+            Everything you need to know before starting your project. Can't find the
             answer you're looking for?{" "}
             <a href="#contact" className="text-[#2563EB] font-medium hover:underline">
-              Talk to our team.
+              Talk to our tech team.
             </a>
           </p>
         </motion.div>
@@ -98,18 +100,18 @@ export default function FAQ() {
             {faqItems.filter((_, i) => i % 2 === 0).map((item, idx) => {
               const i = idx * 2;
               const isOpen = openIndex === i;
-              const tag = tagColors[item.tag] ?? tagColors["Getting Started"];
+              const tag = tagColors[item.tag] ?? tagColors["General"];
 
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 14 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.04 }}
+                  initial={{ opacity: 0, y: 25, scale: 0.98, filter: "blur(5px)" }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: idx * 0.1 }}
                   className={`rounded-2xl border transition-all duration-300 ${
                     isOpen
-                      ? "border-[#2563EB]/25 bg-white shadow-lg shadow-blue-50"
+                      ? "border-[#9FA1FF]/25 bg-white shadow-lg shadow-violet-50"
                       : "border-gray-100 bg-[#F8FAFC] hover:bg-white hover:border-gray-200 hover:shadow-sm"
                   }`}
                 >
@@ -122,7 +124,7 @@ export default function FAQ() {
                     {/* Index number */}
                     <span
                       className={`text-xs font-bold w-6 flex-shrink-0 transition-colors duration-200 ${
-                        isOpen ? "text-[#2563EB]" : "text-[#CBD5E1]"
+                        isOpen ? "text-[#9FA1FF]" : "text-[#CBD5E1]"
                       }`}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -131,7 +133,7 @@ export default function FAQ() {
                     {/* Question text */}
                     <span
                       className={`flex-1 text-sm sm:text-base font-semibold leading-snug transition-colors duration-200 ${
-                        isOpen ? "text-[#2563EB]" : "text-[#0F172A]"
+                        isOpen ? "text-[#9FA1FF]" : "text-[#0F172A]"
                       }`}
                     >
                       {item.q}
@@ -149,7 +151,7 @@ export default function FAQ() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? "bg-[#2563EB] text-white shadow-md shadow-blue-400/30"
+                          ? "bg-gradient-to-br from-[#9FA1FF] to-[#2563EB] text-white shadow-md shadow-violet-400/30"
                           : "bg-white border border-gray-200 text-[#94A3B8]"
                       }`}
                     >
@@ -185,18 +187,18 @@ export default function FAQ() {
             {faqItems.filter((_, i) => i % 2 !== 0).map((item, idx) => {
               const i = idx * 2 + 1;
               const isOpen = openIndex === i;
-              const tag = tagColors[item.tag] ?? tagColors["Getting Started"];
+              const tag = tagColors[item.tag] ?? tagColors["General"];
 
               return (
                 <motion.div
                   key={i}
-                  initial={{ opacity: 0, y: 14 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-40px" }}
-                  transition={{ duration: 0.4, delay: i * 0.04 }}
+                  initial={{ opacity: 0, y: 25, scale: 0.98, filter: "blur(5px)" }}
+                  whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: idx * 0.1 }}
                   className={`rounded-2xl border transition-all duration-300 ${
                     isOpen
-                      ? "border-[#2563EB]/25 bg-white shadow-lg shadow-blue-50"
+                      ? "border-[#9FA1FF]/25 bg-white shadow-lg shadow-violet-50"
                       : "border-gray-100 bg-[#F8FAFC] hover:bg-white hover:border-gray-200 hover:shadow-sm"
                   }`}
                 >
@@ -209,7 +211,7 @@ export default function FAQ() {
                     {/* Index number */}
                     <span
                       className={`text-xs font-bold w-6 flex-shrink-0 transition-colors duration-200 ${
-                        isOpen ? "text-[#2563EB]" : "text-[#CBD5E1]"
+                        isOpen ? "text-[#9FA1FF]" : "text-[#CBD5E1]"
                       }`}
                     >
                       {String(i + 1).padStart(2, "0")}
@@ -218,7 +220,7 @@ export default function FAQ() {
                     {/* Question text */}
                     <span
                       className={`flex-1 text-sm sm:text-base font-semibold leading-snug transition-colors duration-200 ${
-                        isOpen ? "text-[#2563EB]" : "text-[#0F172A]"
+                        isOpen ? "text-[#9FA1FF]" : "text-[#0F172A]"
                       }`}
                     >
                       {item.q}
@@ -236,7 +238,7 @@ export default function FAQ() {
                     <div
                       className={`w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 transition-all duration-300 ${
                         isOpen
-                          ? "bg-[#2563EB] text-white shadow-md shadow-blue-400/30"
+                          ? "bg-gradient-to-br from-[#9FA1FF] to-[#2563EB] text-white shadow-md shadow-violet-400/30"
                           : "bg-white border border-gray-200 text-[#94A3B8]"
                       }`}
                     >
@@ -270,15 +272,15 @@ export default function FAQ() {
 
         {/* ── Bottom CTA strip ── */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          initial={{ opacity: 0, y: 30, scale: 0.95, filter: "blur(8px)" }}
+          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
           className="max-w-3xl mx-auto mt-10"
         >
           <div className="flex flex-col sm:flex-row items-center justify-between gap-5 p-6 rounded-2xl bg-[#F8FAFC] border border-gray-100">
             <div className="flex items-center gap-4">
-              <div className="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
+              <div className="w-11 h-11 rounded-xl bg-teal-50 flex items-center justify-center flex-shrink-0">
                 <MessageCircle size={20} className="text-[#2563EB]" />
               </div>
               <div>
@@ -292,7 +294,7 @@ export default function FAQ() {
             </div>
             <a
               href="#contact"
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-500/20 hover:shadow-blue-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-[#2563EB] to-[#9FA1FF] text-white text-sm font-semibold rounded-xl shadow-lg shadow-violet-500/20 hover:shadow-violet-500/35 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 whitespace-nowrap"
             >
               Contact Us
               <ArrowRight size={15} />

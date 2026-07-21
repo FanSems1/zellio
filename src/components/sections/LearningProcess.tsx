@@ -34,7 +34,7 @@ export default function LearningProcess() {
           transition={{ duration: 0.6 }}
           className="text-center max-w-2xl mx-auto mb-16"
         >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-4 border border-blue-100">
+          <span className="inline-block px-4 py-1.5 rounded-full bg-teal-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-4 border border-teal-100">
             Learning Process
           </span>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-4">
@@ -55,7 +55,7 @@ export default function LearningProcess() {
               initial={{ width: 0 }}
               animate={isInView ? { width: "100%" } : { width: 0 }}
               transition={{ duration: 1.5, ease: "easeInOut", delay: 0.3 }}
-              className="h-full bg-gradient-to-r from-[#2563EB] to-[#06B6D4] rounded-full"
+              className="h-full bg-gradient-to-r from-[#2563EB] via-[#9FA1FF] to-[#2563EB] rounded-full"
             />
           </div>
 
@@ -71,12 +71,12 @@ export default function LearningProcess() {
                   className="flex flex-col items-center text-center"
                 >
                   {/* Step circle */}
-                  <div className="w-[104px] h-[104px] rounded-full bg-white border-2 border-gray-100 flex items-center justify-center mb-4 shadow-lg shadow-black/5 group cursor-default hover:border-[#2563EB] transition-colors">
-                    <div className="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-[#2563EB] transition-colors">
+                  <div className="w-[104px] h-[104px] rounded-full bg-white border-2 border-gray-100 flex items-center justify-center mb-4 shadow-lg shadow-black/5 group cursor-default hover:border-[#9FA1FF] transition-colors">
+                    <div className="w-16 h-16 rounded-full bg-violet-50 flex items-center justify-center group-hover:bg-gradient-to-br group-hover:from-[#9FA1FF] group-hover:to-[#2563EB] transition-colors">
                       {Icon && (
                         <Icon
                           size={26}
-                          className="text-[#2563EB] group-hover:text-white transition-colors"
+                          className="text-[#9FA1FF] group-hover:text-white transition-colors"
                         />
                       )}
                     </div>
@@ -112,11 +112,11 @@ export default function LearningProcess() {
               >
                 {/* Vertical line + circle */}
                 <div className="flex flex-col items-center">
-                  <div className="w-11 h-11 rounded-full bg-blue-50 border-2 border-blue-100 flex items-center justify-center flex-shrink-0">
-                    {Icon && <Icon size={20} className="text-[#2563EB]" />}
+                  <div className="w-11 h-11 rounded-full bg-violet-50 border-2 border-violet-100 flex items-center justify-center flex-shrink-0">
+                    {Icon && <Icon size={20} className="text-[#9FA1FF]" />}
                   </div>
                   {i < learningSteps.length - 1 && (
-                    <div className="w-[2px] h-12 bg-gradient-to-b from-[#2563EB]/30 to-gray-100" />
+                    <div className="w-[2px] h-12 bg-gradient-to-b from-[#9FA1FF]/30 to-gray-100" />
                   )}
                 </div>
                 {/* Content */}
