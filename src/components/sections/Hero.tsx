@@ -11,6 +11,71 @@ const floatingCards = [
   { label: "99.9% System Uptime", delay: 0.5, accent: "#9FA1FF" },
 ];
 
+const techIcons = [
+  {
+    name: "React.js",
+    color: "#61DAFB",
+    svg: (
+      <svg viewBox="-11.5 -10.23174 23 20.46348" className="w-16 h-16">
+        <circle cx="0" cy="0" r="2.05" fill="currentColor"/>
+        <g stroke="currentColor" strokeWidth="1" fill="none">
+          <ellipse rx="11" ry="4.2"/>
+          <ellipse rx="11" ry="4.2" transform="rotate(60)"/>
+          <ellipse rx="11" ry="4.2" transform="rotate(120)"/>
+        </g>
+      </svg>
+    ),
+    position: "top-[20%] left-[2%] xl:left-[8%]",
+    delay: 0.2,
+  },
+  {
+    name: "Next.js",
+    color: "#000000",
+    svg: (
+      <svg viewBox="0 0 180 180" className="w-16 h-16">
+        <circle cx="90" cy="90" r="90" fill="currentColor"/>
+        <path fill="#fff" d="M149.508 157.52L69.142 54H54v71.97h12.114V69.384l73.885 95.361a90.304 90.304 0 0 0 9.509-7.225Z"/>
+        <path fill="#fff" d="M115 54h12v72h-12z"/>
+      </svg>
+    ),
+    position: "top-[25%] right-[2%] xl:right-[8%]",
+    delay: 0.4,
+  },
+  {
+    name: "Node.js",
+    color: "#339933",
+    svg: (
+      <svg viewBox="0 0 128 128" className="w-16 h-16" fill="currentColor">
+        <path d="M64 5.952L4.015 39.816v68.329l59.985 33.903 59.985-33.903V39.816L64 5.952zm42.668 93.181L64 122.991l-42.668-23.858V51.74l42.668-23.858L106.668 51.74v47.393z"/>
+      </svg>
+    ),
+    position: "top-[42%] left-[6%] xl:left-[12%]",
+    delay: 0.6,
+  },
+  {
+    name: "Golang",
+    color: "#00ADD8",
+    svg: (
+      <svg viewBox="0 0 128 128" className="w-20 h-20" fill="currentColor">
+        <path d="M37.3 84.7c-8.9 0-14.7-6.2-14.7-14.8 0-8.6 6-14.9 14.9-14.9 5.8 0 9.9 2.7 12 7l-5.3 3c-1.6-2.5-4-3.9-6.9-3.9-5 0-8.5 4.1-8.5 8.7 0 4.5 3.5 8.8 8.4 8.8 3.5 0 6.6-1.8 7.8-5h-8v-5.6h14v13.5c-2.4 2-6.5 3.2-13.7 3.2zm23.6-.3c-8.8 0-14.8-6.3-14.8-15s6-15 14.8-15 14.7 6.3 14.7 15-5.9 15-14.7 15zm0-6.1c5 0 8.5-4.1 8.5-8.9s-3.5-8.9-8.5-8.9-8.6 4.1-8.6 8.9 3.6 8.9 8.6 8.9zm16.9-14v-8.2h6v28.2h-6V84.4h-.1c-1.5 2.1-4.7 3.4-8 3.4-6.4 0-11-5-11-11.8s4.6-11.8 11-11.8c3.2 0 6.4 1.3 7.9 3.5h.2zM80.2 70c-3.6 0-6.1 2.9-6.1 6 0 3.1 2.5 6 6.1 6s6.1-2.9 6.1-6c0-3.1-2.5-6-6.1-6z"/>
+      </svg>
+    ),
+    position: "top-[55%] right-[3%] xl:right-[12%]",
+    delay: 0.8,
+  },
+  {
+    name: "MySQL",
+    color: "#00618A",
+    svg: (
+      <svg viewBox="0 0 128 128" className="w-16 h-16" fill="currentColor">
+         <path d="M64 24c-26.5 0-48 7.2-48 16s21.5 16 48 16 48-7.2 48-16-21.5-16-48-16zm0 24c-22.1 0-40.8-5.3-46.6-12.4-.9 1.4-1.4 2.9-1.4 4.4 0 8.8 21.5 16 48 16s48-7.2 48-16c0-1.5-.5-3-1.4-4.4C104.8 42.7 86.1 48 64 48zm0 24c-22.1 0-40.8-5.3-46.6-12.4-.9 1.4-1.4 2.9-1.4 4.4 0 8.8 21.5 16 48 16s48-7.2 48-16c0-1.5-.5-3-1.4-4.4C104.8 66.7 86.1 72 64 72zm0 24c-22.1 0-40.8-5.3-46.6-12.4-.9 1.4-1.4 2.9-1.4 4.4 0 8.8 21.5 16 48 16s48-7.2 48-16c0-1.5-.5-3-1.4-4.4C104.8 90.7 86.1 96 64 96z"/>
+      </svg>
+    ),
+    position: "top-[15%] right-[24%] xl:right-[20%]",
+    delay: 1.0,
+  }
+];
+
 export default function Hero() {
   return (
     <section id="home" className="relative min-h-[110vh] flex flex-col justify-center items-center overflow-hidden pt-32 pb-20 bg-[#F8FAFC]">
@@ -21,6 +86,27 @@ export default function Hero() {
       
       {/* Grid Overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(#0F172A_1px,transparent_1px)] [background-size:32px_32px] opacity-[0.02] pointer-events-none" />
+
+      {/* Floating Tech Stack Icons */}
+      {techIcons.map((icon) => (
+        <motion.div
+          key={icon.name}
+          title={icon.name}
+          initial={{ opacity: 0, scale: 0.3, y: 50 }}
+          animate={{ opacity: 0.75, scale: 1, y: 0 }}
+          whileHover={{ opacity: 1, scale: 1.15, filter: "drop-shadow(0 20px 30px rgba(0,0,0,0.1))" }}
+          transition={{ 
+            delay: icon.delay, 
+            type: "spring", 
+            stiffness: 70, 
+            damping: 12 
+          }}
+          style={{ color: icon.color }}
+          className={`absolute z-10 hidden md:block cursor-pointer drop-shadow-2xl ${icon.position}`}
+        >
+          {icon.svg}
+        </motion.div>
+      ))}
 
       <div className="section-container relative z-10 w-full flex flex-col items-center text-center">
         {/* Main Content */}

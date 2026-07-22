@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { motion, useInView } from "framer-motion";
+import React, { useEffect, useRef, useState } from "react";
+import { motion, useInView, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, useMotionValueEvent } from "framer-motion";
 import {
   CheckCircle2,
   Target,
@@ -11,289 +11,390 @@ import {
 } from "lucide-react";
 import { stats } from "@/lib/data";
 
-// Animated counter hook
-function useCountUp(end: number, duration: number = 2000, start: boolean = false) {
-  const [count, setCount] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    let startTime: number | null = null;
-    let raf: number;
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp;
-      const progress = Math.min((timestamp - startTime) / duration, 1);
-      setCount(Math.floor(progress * end));
-      if (progress < 1) raf = requestAnimationFrame(animate);
-    };
-    raf = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(raf);
-  }, [end, duration, start]);
-  return count;
-}
-
-function StatCard({ value, suffix, label, delay }: { value: number; suffix: string; label: string; delay: number }) {
+function BentoStatItem({ value, suffix, label, icon: Icon, delay }: { value: number; suffix: string; label: string; icon: any; delay: number }) {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  const count = useCountUp(value, 2000, inView);
+  
+  const spring = useSpring(0, {
+    mass: 0.8,
+    stiffness: 45,
+    damping: 14,
+  });
+
+  const [displayCount, setDisplayCount] = useState(0);
+
+  useEffect(() => {
+    if (inView) {
+      const timer = setTimeout(() => {
+        spring.set(value);
+      }, delay * 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [inView, value, delay, spring]);
+
+  useEffect(() => {
+    return spring.on("change", (latest) => {
+      setDisplayCount(Math.floor(latest));
+    });
+  }, [spring]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial={{ opacity: 0, y: 30, scale: 0.95, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay }}
-      className="text-center"
-    >
-      <div className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#9FA1FF] to-[#2563EB] mb-2 select-none tracking-tight">
-        {count}{suffix}
+    <div ref={ref} className="bg-white border border-slate-100 rounded-[24px] p-6 flex flex-col gap-4 group hover:border-blue-100 hover:shadow-xl hover:shadow-blue-500/[0.03] transition-all duration-300">
+      <div className="w-10 h-10 rounded-xl bg-blue-50/50 flex items-center justify-center text-[#2563EB] group-hover:bg-[#2563EB] group-hover:text-white transition-colors duration-300">
+        <Icon size={20} strokeWidth={2.5} />
       </div>
-      <p className="text-sm font-semibold text-slate-500 tracking-wide">{label}</p>
-    </motion.div>
+      <div>
+        <h4 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-br from-blue-600 to-indigo-500 mb-1 font-sans">
+          {displayCount}{suffix}
+        </h4>
+        <p className="text-xs sm:text-sm font-semibold text-slate-500 tracking-tight">{label}</p>
+      </div>
+    </div>
   );
 }
 
 const coreValues = [
-  { icon: Target, title: "Client Success", desc: "We build IT systems that directly drive business growth and productivity." },
-  { icon: Heart, title: "User-Centric", desc: "We prioritize intuitive, fast, and accessible user interfaces in every project." },
-  { icon: Zap, title: "Modern Tech", desc: "We leverage cutting-edge tech stacks for performance and scalability." },
-  { icon: TrendingUp, title: "Elite Quality", desc: "We adhere to strict coding standards to deliver clean and secure codebases." },
+  { icon: Target, title: "Client Success", desc: "We build IT systems that directly drive business growth and productivity.", gradient: "from-blue-600 to-indigo-600 shadow-blue-600/20" },
+  { icon: Heart, title: "User-Centric", desc: "We prioritize intuitive, fast, and accessible user interfaces in every project.", gradient: "from-indigo-500 to-purple-600 shadow-purple-500/20" },
+  { icon: Zap, title: "Modern Tech", desc: "We leverage cutting-edge tech stacks for performance and scalability.", gradient: "from-purple-600 to-pink-500 shadow-pink-500/20" },
+  { icon: TrendingUp, title: "Elite Quality", desc: "We adhere to strict coding standards to deliver clean and secure codebases.", gradient: "from-cyan-500 to-blue-600 shadow-cyan-500/20" },
 ];
+
+const containerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+    }
+  }
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 30 },
+  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
+};
+
+function GrandRevealPillar({ 
+  idx, 
+  title, 
+  desc, 
+  icon: Icon, 
+  gradient 
+}: { 
+  idx: number; 
+  title: string; 
+  desc: string; 
+  icon: any; 
+  gradient: string;
+}) {
+  return (
+    <motion.div
+      variants={itemVariants}
+      className="relative flex flex-col items-center lg:items-start text-center lg:text-left py-4 lg:py-6 px-3 lg:px-4 group select-none"
+    >
+      {/* Soft Ambient Glow (No borders or cards, pure light source behind values) */}
+      <div className={`absolute inset-0 rounded-full blur-[40px] lg:blur-[60px] opacity-10 group-hover:opacity-25 transition-all duration-700 bg-gradient-to-tr ${gradient} pointer-events-none`} />
+
+      {/* Floating Icon Container */}
+      <div className={`relative z-10 w-11 h-11 lg:w-16 lg:h-16 rounded-xl lg:rounded-2xl flex items-center justify-center text-white bg-gradient-to-tr ${gradient} shadow-lg mb-3 lg:mb-6 group-hover:scale-110 group-hover:rotate-6 transition-all duration-500`}>
+        <Icon className="w-5 h-5 lg:w-8 lg:h-8" strokeWidth={1.5} />
+      </div>
+
+      {/* Giant Watermark Number */}
+      <div className="absolute top-6 lg:top-10 right-2 lg:right-10 text-[40px] lg:text-[90px] font-black text-slate-200/20 group-hover:text-slate-200/30 transition-colors duration-500 pointer-events-none font-mono">
+        0{idx + 1}
+      </div>
+
+      {/* Typography */}
+      <h4 className="relative z-10 text-base lg:text-2xl font-black text-[#0F172A] mb-1 lg:mb-2 tracking-tight">
+        {title}
+      </h4>
+      <p className="relative z-10 text-[10px] lg:text-sm leading-relaxed font-semibold text-[#64748B] max-w-[200px]">
+        {desc}
+      </p>
+      
+      {/* Accent line */}
+      <div className={`mt-3 lg:mt-6 w-8 lg:w-12 h-[3px] rounded-full bg-gradient-to-r ${gradient} scale-x-50 group-hover:scale-x-100 transition-transform duration-500 origin-left`} />
+    </motion.div>
+  );
+}
+
+function ValueBlock({ 
+  idx, 
+  title, 
+  desc, 
+  icon: Icon, 
+  gradient,
+}: { 
+  idx: number; 
+  title: string; 
+  desc: string; 
+  icon: any; 
+  gradient: string;
+}) {
+  return (
+    <div className={`relative w-full max-w-[500px] flex items-start gap-4 md:gap-6 group cursor-default py-4`}>
+      {/* Active Line Indicator */}
+      <div className={`absolute left-[-16px] md:left-[-32px] top-0 bottom-0 w-[3px] rounded-full bg-gradient-to-b ${gradient}`} />
+
+      {/* Giant Number Watermark */}
+      <div className={`absolute -top-6 -left-2 text-[100px] md:text-[140px] font-black tracking-tighter pointer-events-none z-[-1] leading-[0.8] text-slate-200/50`}>
+        0{idx + 1}
+      </div>
+
+      <div className={`relative z-10 opacity-100`}>
+        <div className="flex items-center gap-4 mb-4">
+          {/* Mobile-only Icon Indicator */}
+          <div className={`lg:hidden flex-shrink-0 w-12 h-12 rounded-xl flex items-center justify-center text-white transition-all duration-700 bg-gradient-to-tr ${gradient}`}>
+            <Icon size={24} strokeWidth={2.5} />
+          </div>
+          <h4 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tight">
+            {title}
+          </h4>
+        </div>
+        <p className="text-base md:text-lg leading-relaxed font-medium text-[#64748B]">
+          {desc}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function DrivenByValuesSection() {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest < 0.18) setActiveIdx(0);
+    else if (latest < 0.36) setActiveIdx(1);
+    else if (latest < 0.54) setActiveIdx(2);
+    else if (latest < 0.72) setActiveIdx(3);
+    else setActiveIdx(4); // Grand Finale State!
+  });
+
+  const ActiveIcon = activeIdx < 4 ? coreValues[activeIdx].icon : null;
+
+  return (
+    <div ref={containerRef} className="h-[250vh] w-full relative mb-16">
+      
+      {/* The 1-Screen Sticky Slideshow Container */}
+      <div className="sticky top-0 h-screen w-full flex items-center justify-center overflow-hidden bg-[#FAFAFA] rounded-[48px] border border-slate-100">
+        
+        {/* Ambient background mesh */}
+        <div className="absolute inset-0 bg-[radial-gradient(#E2E8F0_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
+
+        <AnimatePresence mode="wait">
+          {activeIdx < 4 ? (
+            <motion.div
+              key="split-slideshow"
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="w-full max-w-6xl mx-auto px-6 sm:px-12 relative z-10 flex flex-col lg:flex-row gap-12 lg:gap-24 items-center lg:items-start pt-16 lg:pt-0"
+            >
+              {/* LEFT COLUMN: Static Header & Quantum Core */}
+              <div className="w-full lg:w-1/2 flex flex-col justify-center text-center lg:text-left h-full">
+                <div>
+                  <span className="inline-block px-5 py-2 rounded-full bg-white text-[#2563EB] text-xs font-bold uppercase tracking-widest mb-4 border border-blue-100/50 shadow-sm">
+                    Our Core DNA
+                  </span>
+                  <h3 className="text-4xl sm:text-5xl md:text-6xl font-black text-[#0F172A] tracking-tight leading-tight mb-6">
+                    Driven by <br className="hidden lg:block"/> 
+                    <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Values</span>
+                  </h3>
+                  <p className="text-[#64748B] text-base md:text-lg leading-relaxed font-medium mb-8 lg:mb-12 lg:max-w-md mx-auto lg:mx-0">
+                    Every decision and system we build is guided by these four foundational principles.
+                  </p>
+                </div>
+
+                {/* Interactive Quantum Core (Hidden on Mobile) */}
+                {ActiveIcon && (
+                  <div className="relative w-40 h-40 sm:w-48 sm:h-48 lg:w-56 lg:h-56 hidden lg:flex items-center justify-center" style={{ perspective: "1000px" }}>
+                    {/* Outer Glowing Ambient Orb */}
+                    <div 
+                      className={`absolute inset-0 rounded-full blur-[50px] opacity-40 transition-all duration-1000 ease-in-out bg-gradient-to-tr ${coreValues[activeIdx].gradient}`}
+                    />
+                    {/* Solid Glassmorphic Orb */}
+                    <div 
+                      className={`relative z-10 w-full h-full rounded-full bg-gradient-to-tr ${coreValues[activeIdx].gradient} flex items-center justify-center shadow-2xl transition-all duration-1000 ease-in-out border-[6px] border-white/20`}
+                    >
+                      <AnimatePresence mode="wait">
+                        <motion.div
+                          key={activeIdx}
+                          initial={{ opacity: 0, scale: 0.5, rotate: -45 }}
+                          animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                          exit={{ opacity: 0, scale: 1.5, rotate: 45 }}
+                          transition={{ duration: 0.5, type: "spring", bounce: 0.4 }}
+                          className="text-white drop-shadow-md"
+                        >
+                          <ActiveIcon size={80} strokeWidth={1.5} />
+                        </motion.div>
+                      </AnimatePresence>
+                    </div>
+                    <div className="absolute inset-[-40px] rounded-full border border-slate-300/50 border-dashed animate-[spin_20s_linear_infinite] pointer-events-none" />
+                    <div className="absolute inset-[-70px] rounded-full border border-slate-200/40 border-dashed animate-[spin_30s_linear_infinite_reverse] pointer-events-none" />
+                  </div>
+                )}
+              </div>
+
+              {/* RIGHT COLUMN: Static Typography Slideshow */}
+              <div className="w-full lg:w-1/2 relative h-[40vh] lg:h-[70vh]">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={activeIdx}
+                    initial={{ opacity: 0, y: 40 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -40 }}
+                    transition={{ duration: 0.4, ease: "easeOut" }}
+                    className="absolute inset-0 flex items-center justify-center lg:justify-start"
+                  >
+                    <ValueBlock
+                      idx={activeIdx}
+                      title={coreValues[activeIdx].title}
+                      desc={coreValues[activeIdx].desc}
+                      icon={coreValues[activeIdx].icon}
+                      gradient={coreValues[activeIdx].gradient}
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+            </motion.div>
+          ) : (
+            <motion.div
+              key="grand-reveal"
+              initial={{ opacity: 0, scale: 1.05, y: 50 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -50 }}
+              transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              className="w-full max-w-6xl mx-auto px-6 sm:px-12 relative z-10 flex flex-col items-center justify-center h-full"
+            >
+              {/* Grand Reveal Header */}
+              <div className="text-center max-w-2xl mx-auto mb-8 lg:mb-16">
+                <span className="inline-block px-5 py-2 rounded-full bg-white text-[#2563EB] text-xs font-bold uppercase tracking-widest mb-4 border border-blue-100/50 shadow-sm">
+                  Our Core DNA
+                </span>
+                <h3 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black text-[#0F172A] tracking-tight leading-tight">
+                  Driven by <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600">Values</span>
+                </h3>
+              </div>
+
+              {/* 4 Pillars Grid (staggered animation entrance, 2x2 on mobile, 1x4 on desktop) */}
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+                className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-8 w-full justify-items-center"
+              >
+                {coreValues.map((v, i) => (
+                  <GrandRevealPillar
+                    key={i}
+                    idx={i}
+                    title={v.title}
+                    desc={v.desc}
+                    icon={v.icon}
+                    gradient={v.gradient}
+                  />
+                ))}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        
+      </div>
+    </div>
+  );
+}
 
 export default function About() {
   return (
     <section id="about" className="pt-24 pb-12 lg:pt-28 lg:pb-16 bg-white">
       <div className="section-container">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 35, scale: 0.95, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-teal-50 text-[#2563EB] text-xs font-semibold uppercase tracking-widest mb-4 border border-teal-100">
-            About Digifore
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-4">
-            Building the Future of{" "}
-            <span className="gradient-text">Digital Systems</span>
-          </h2>
-          <p className="text-[#64748B] leading-relaxed">
-            Digifore is a premium software development agency providing end-to-end IT services
-            to help businesses scale through robust digital platforms.
-          </p>
-        </motion.div>
-
-        {/* Zig-zag Section 1 */}
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20">
+        {/* About Bento Box Section */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 mb-12">
+          
+          {/* Main Card (col-span-2) */}
           <motion.div
-            initial={{ opacity: 0, x: -40, scale: 0.95, filter: "blur(10px)" }}
-            whileInView={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative"
+            className="lg:col-span-2 bg-gradient-to-br from-white via-slate-50/50 to-slate-100/50 border border-slate-100 rounded-[28px] p-6 md:p-10 relative overflow-hidden group shadow-[0_15px_30px_-15px_rgba(0,0,0,0.03)] hover:shadow-xl transition-all duration-500"
           >
-            <div className="aspect-[4/3] rounded-3xl bg-gradient-to-br from-blue-50 to-cyan-50 flex items-center justify-center overflow-hidden">
-              <div className="w-full h-full bg-gradient-to-br from-[#2563EB]/5 via-transparent to-[#06B6D4]/5 flex items-center justify-center">
-                <div className="text-center p-8">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-[#2563EB] via-[#9FA1FF] to-[#2563EB] flex items-center justify-center shadow-xl shadow-violet-500/20">
-                    <span className="text-white text-3xl font-extrabold">DF</span>
-                  </div>
-                  <p className="text-lg font-semibold text-[#0F172A]">Since 2018</p>
-                  <p className="text-sm text-[#64748B] mt-1">Pioneering digital innovation in Indonesia</p>
-                </div>
-              </div>
+            {/* Ambient Background Grid */}
+            <div className="absolute inset-0 opacity-[0.015] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
+            
+            <div className="absolute top-0 right-0 p-6 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity duration-500 pointer-events-none">
+               <Target size={120} className="text-[#2563EB] -rotate-12 translate-x-8 -translate-y-8 transition-transform duration-700 group-hover:translate-x-2 group-hover:-translate-y-2" />
             </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 40, scale: 0.98, filter: "blur(8px)" }}
-            whileInView={{ opacity: 1, x: 0, scale: 1, filter: "blur(0px)" }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <h3 className="text-2xl font-bold text-[#0F172A] mb-4">
-              Who We Are
-            </h3>
-            <p className="text-[#64748B] leading-relaxed mb-4">
-              Founded in 2018, Digifore has grown into one of Indonesia&apos;s
-              leading software development houses. We combine cutting-edge
-              technologies with top-tier engineers to deliver systems that drive real business impact.
-            </p>
-            <p className="text-[#64748B] leading-relaxed mb-6">
-              Our approach is simple: write clean code, focus on pixel-perfect UI/UX, and deploy robust architectures. 
-              Whether you need a custom corporate dashboard, a mobile application, or a full enterprise system, 
-              we build solutions tailored for you.
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {[
-                "150+ Projects delivered",
-                "98% Client satisfaction rate",
-                "50+ Enterprise clients",
-                "8+ Years of expertise",
-              ].map((item) => (
-                <div key={item} className="flex items-center gap-2">
-                  <CheckCircle2 size={16} className="text-[#22C55E] flex-shrink-0" />
-                  <span className="text-sm font-medium text-[#0F172A]">{item}</span>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Core Values Section */}
-        <div className="mb-28 p-8 sm:p-12 lg:p-16 rounded-[40px] bg-gradient-to-b from-slate-50 to-white border border-slate-100/80 shadow-sm relative overflow-hidden">
-          {/* Grid Background */}
-          <div className="absolute inset-0 opacity-[0.015] bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
-          {/* Ambient Glows */}
-          <div className="absolute -top-48 -left-48 w-[400px] h-[400px] rounded-full bg-blue-500/5 blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-48 -right-48 w-[400px] h-[400px] rounded-full bg-indigo-500/5 blur-3xl pointer-events-none" />
-
-          <div className="relative z-10">
-            {/* Section Header (Full Width at Top) */}
-            <motion.div
-              initial={{ opacity: 0, y: 30, scale: 0.95, filter: "blur(10px)" }}
-              whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-2xl mb-12 sm:mb-16"
-            >
-              <span className="inline-block px-3 py-1 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-black uppercase tracking-widest mb-3 border border-blue-100">
-                Our Core DNA
-              </span>
-              <h3 className="text-3xl sm:text-4xl font-black text-[#0F172A] tracking-tight leading-tight mb-4">
-                Driven by{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#9FA1FF] to-[#2563EB]">
-                  Values
+            <div className="relative z-10 h-full flex flex-col justify-center">
+              <div>
+                <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#2563EB] text-[10px] font-black uppercase tracking-widest mb-4 border border-blue-100/80 shadow-sm">
+                  Who We Are
                 </span>
-              </h3>
-              <p className="text-[#64748B] text-sm sm:text-base leading-relaxed font-medium">
-                Every decision we make is guided by a set of principles that
-                reflect our commitment to clients, coding excellence, and technology innovation.
-              </p>
-            </motion.div>
-
-            {/* Split Grid */}
-            <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 lg:gap-16 items-start">
-              {/* Left Column (Typographic Interactive List) */}
-              <div className="border-t border-slate-100/60 divide-y divide-slate-100/60">
-                {coreValues.map(({ icon: Icon, title, desc }, i) => (
-                  <motion.div
-                    key={title}
-                    initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
-                    whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    viewport={{ once: true, margin: "-50px" }}
-                    transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: i * 0.08 }}
-                    className="py-6 sm:py-7 group relative cursor-pointer overflow-hidden transition-all duration-300 flex items-center gap-6 pl-4 pr-4 hover:pl-8"
-                  >
-                    {/* Hover Slide Background */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-500/[0.03] via-indigo-500/[0.01] to-transparent -z-10 translate-x-[-100%] group-hover:translate-x-0 transition-transform duration-500 ease-out" />
-                    
-                    {/* Left accent bar */}
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-[4px] h-10 bg-gradient-to-b from-[#2563EB] to-[#9FA1FF] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-center rounded-full" />
-
-                    {/* Serial Number */}
-                    <span className="text-2xl sm:text-3xl font-black font-mono text-[#E2E8F0] group-hover:text-[#2563EB] transition-colors duration-300 shrink-0">
-                      0{i + 1}
-                    </span>
-
-                    {/* Icon */}
-                    <div className="w-12 h-12 rounded-xl bg-white border border-slate-200/50 flex items-center justify-center text-slate-400 group-hover:bg-gradient-to-br group-hover:from-[#2563EB] group-hover:to-[#9FA1FF] group-hover:text-white group-hover:border-transparent group-hover:shadow-lg group-hover:shadow-blue-500/20 transition-all duration-300 shrink-0">
-                      <Icon size={20} className="transition-transform duration-300 group-hover:rotate-[15deg]" />
-                    </div>
-
-                    {/* Text Content */}
-                    <div className="flex-1">
-                      <h4 className="text-base sm:text-lg font-black text-[#0F172A] mb-1 tracking-tight transition-colors duration-300 group-hover:text-[#2563EB]">
-                        {title}
-                      </h4>
-                      <p className="text-xs sm:text-sm text-[#64748B] leading-relaxed font-medium transition-colors duration-300 group-hover:text-[#475569]">
-                        {desc}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
+                <h2 className="text-3xl md:text-4xl font-black text-[#0F172A] tracking-tight leading-tight mb-4">
+                  We Engineer <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#2563EB] via-[#9FA1FF] to-[#2563EB]">Digital Success.</span>
+                </h2>
+                <p className="text-[#64748B] text-sm md:text-base leading-relaxed max-w-xl font-medium mb-3">
+                  Digifore is a premium software development agency providing end-to-end IT services. We combine cutting-edge technologies with top-tier engineers to deliver systems that drive real business impact.
+                </p>
+                <p className="text-[#64748B] text-xs md:text-sm leading-relaxed max-w-xl font-medium opacity-80">
+                  Our approach is simple: write clean code, focus on pixel-perfect UI/UX, and deploy robust architectures.
+                </p>
               </div>
-
-              {/* Right Column (IDE Mockup) */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.93, y: 40, filter: "blur(10px)" }}
-                whileInView={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px)" }}
-                viewport={{ once: true, margin: "-100px" }}
-                transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-                className="w-full flex items-start justify-center lg:mt-2"
-              >
-                {/* Premium IDE Mockup */}
-                <div className="relative rounded-2xl bg-[#0F172A] border border-slate-800 shadow-2xl p-6 sm:p-8 overflow-hidden font-mono text-xs sm:text-[13px] text-slate-400 w-full max-w-lg">
-                  {/* Title bar */}
-                  <div className="flex items-center justify-between pb-3.5 mb-3.5 border-b border-slate-800">
-                    <div className="flex items-center gap-1.5">
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#F59E0B]" />
-                      <span className="w-2.5 h-2.5 rounded-full bg-[#10B981]" />
-                    </div>
-                    <span className="text-[10px] text-slate-500 font-semibold select-none">core-dna.config.ts</span>
-                    <div className="w-8" />
-                  </div>
-                  {/* Code Content */}
-                  <div className="space-y-2 leading-relaxed select-none">
-                    <div className="text-slate-500">// Digifore Core Quality Standards</div>
-                    <div>
-                      <span className="text-[#F43F5E]">const</span>{" "}
-                      <span className="text-[#38BDF8]">projectConfig</span> = {"{"}
-                    </div>
-                    <div className="pl-4">
-                      <span className="text-[#34D399]">clientFirst</span>:{" "}
-                      <span className="text-[#FB923C]">true</span>,
-                    </div>
-                    <div className="pl-4">
-                      <span className="text-[#34D399]">cleanCode</span>:{" "}
-                      <span className="text-[#FB923C]">true</span>,
-                    </div>
-                    <div className="pl-4">
-                      <span className="text-[#34D399]">techStack</span>: [
-                      <span className="text-[#FB923C]">&apos;React&apos;</span>,{" "}
-                      <span className="text-[#FB923C]">&apos;Next.js&apos;</span>,{" "}
-                      <span className="text-[#FB923C]">&apos;Tailwind&apos;</span>
-                      ],
-                    </div>
-                    <div className="pl-4">
-                      <span className="text-[#34D399]">coverage</span>:{" "}
-                      <span className="text-[#FB923C]">&apos;98%&apos;</span>,
-                    </div>
-                    <div className="pl-4">
-                      <span className="text-[#34D399]">deployment</span>:{" "}
-                      <span className="text-[#FB923C]">&apos;Automated CI/CD&apos;</span>
-                    </div>
-                    <div>{"};"}</div>
-                    
-                    <div className="pt-3 border-t border-slate-800/80 text-slate-500">// Running checks...</div>
-                    <div className="flex items-center gap-2 text-[#10B981]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-ping" />
-                      <span>[PASS] Clean Code Standard Verified</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-[#38BDF8]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#38BDF8] animate-pulse" />
-                      <span>[INFO] Ready to scale-up securely</span>
-                    </div>
-                  </div>
-
-                  {/* Ambient glow in background */}
-                  <div className="absolute -bottom-10 -right-10 w-24 h-24 rounded-full bg-[#38BDF8]/10 blur-xl pointer-events-none" />
-                </div>
-              </motion.div>
             </div>
-          </div>
+          </motion.div>
+
+          {/* Experience Card (col-span-1) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30, scale: 0.98 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
+            className="bg-[#0A0F1C] rounded-[32px] p-8 relative overflow-hidden flex flex-col items-center justify-center text-center group shadow-[0_20px_40px_-20px_rgba(0,0,0,0.3)] border border-slate-800"
+          >
+            {/* Animated Mesh Gradient Background */}
+            <div className="absolute inset-0 bg-gradient-to-br from-[#2563EB]/25 via-transparent to-[#06B6D4]/15 pointer-events-none group-hover:scale-110 transition-transform duration-1000 ease-out" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[220px] h-[220px] bg-blue-500/20 blur-[60px] rounded-full pointer-events-none group-hover:bg-blue-400/30 transition-colors duration-700" />
+            
+            <div className="relative z-10">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-[#2563EB] via-[#9FA1FF] to-[#2563EB] flex items-center justify-center shadow-xl shadow-violet-500/20 group-hover:rotate-[10deg] group-hover:scale-105 transition-all duration-500">
+                <span className="text-white text-3xl font-black">DF</span>
+              </div>
+              <h3 className="text-4xl font-black text-white mb-3 tracking-tight">Since 2018</h3>
+              <p className="text-slate-400 font-medium leading-relaxed max-w-[200px] mx-auto text-sm">Pioneering digital innovation across Indonesia</p>
+            </div>
+          </motion.div>
+
+          {/* Metrics/Capabilities Card (col-span-3) */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.2 }}
+            className="lg:col-span-3 grid grid-cols-2 md:grid-cols-4 gap-4"
+          >
+            {[
+              { label: "Projects Delivered", value: 150, suffix: "+", icon: Target },
+              { label: "Client Satisfaction", value: 98, suffix: "%", icon: Heart },
+              { label: "Enterprise Clients", value: 50, suffix: "+", icon: TrendingUp },
+              { label: "Years Expertise", value: 8, suffix: "+", icon: Zap },
+            ].map((stat, i) => (
+              <BentoStatItem key={stat.label} {...stat} delay={i * 0.15} />
+            ))}
+          </motion.div>
+
         </div>
 
-        {/* Animated Statistics (Borderless Layout) */}
-        <div className="mt-28 border-t border-b border-slate-100 py-16">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-12 lg:gap-y-0 gap-x-8">
-            {stats.map((stat, i) => (
-              <StatCard key={stat.label} {...stat} delay={i * 0.1} />
-            ))}
-          </div>
-        </div>
+        {/* Driven By Values Floating Physics Section */}
+        <DrivenByValuesSection />
+
       </div>
     </section>
   );

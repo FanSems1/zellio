@@ -1,38 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { trustedCompanies } from "@/lib/data";
+import Image from "next/image";
 
-const brandColors: Record<string, string> = {
-  Google: "#4285F4",
-  Microsoft: "#00A4EF",
-  Amazon: "#FF9900",
-  Meta: "#0082FB",
-  Tokopedia: "#42B549",
-  Gojek: "#00AA13",
-  Traveloka: "#0068EB",
-  "Bank BRI": "#003366",
-};
+const companyLogos = [
+  { name: "Elogs", src: "/elogs.png" },
+  { name: "Eureka", src: "/eurekalogo.png" },
+  { name: "Jaja.id", src: "/jajaid.png" },
+  { name: "Masdis", src: "/masdis.png" },
+  { name: "Race", src: "/race.png" },
+];
 
-function LogoChip({ name, abbrev }: { name: string; abbrev: string }) {
+function LogoChip({ name, src }: { name: string; src: string }) {
   return (
-    <div className="flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-white border border-gray-100 shadow-sm flex-shrink-0 mx-3 select-none cursor-default hover:border-blue-200 hover:shadow-md transition-all duration-300 group">
-      <div
-        className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold"
-        style={{ backgroundColor: brandColors[name] ?? "#64748B" }}
-      >
-        {abbrev.slice(0, 2)}
-      </div>
-      <span className="text-sm font-semibold text-[#64748B] group-hover:text-[#0F172A] transition-colors whitespace-nowrap">
-        {name}
-      </span>
+    <div className="flex items-center justify-center px-6 py-3 bg-white border border-gray-100 rounded-2xl shadow-sm flex-shrink-0 mx-3 select-none cursor-default hover:border-blue-200 hover:shadow-md transition-all duration-300 group h-[64px] min-w-[150px]">
+      <Image 
+        src={src} 
+        alt={name} 
+        width={120} 
+        height={40} 
+        className="max-h-[32px] w-auto object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 opacity-60 group-hover:opacity-100"
+      />
     </div>
   );
 }
 
 export default function TrustedBy() {
   // Duplicate the array so the marquee loops seamlessly
-  const doubled = [...trustedCompanies, ...trustedCompanies];
+  const doubled = [...companyLogos, ...companyLogos, ...companyLogos, ...companyLogos];
 
   return (
     <div className="w-full pb-4">
@@ -48,10 +43,10 @@ export default function TrustedBy() {
       </motion.p>
 
       {/* Marquee ticker */}
-      <div className="overflow-hidden marquee-fade">
+      <div className="overflow-hidden marquee-fade relative w-full">
         <div className="animate-marquee">
           {doubled.map((company, i) => (
-            <LogoChip key={`${company.name}-${i}`} name={company.name} abbrev={company.abbrev} />
+            <LogoChip key={`${company.name}-${i}`} name={company.name} src={company.src} />
           ))}
         </div>
       </div>

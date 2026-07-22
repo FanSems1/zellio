@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, useScroll, useTransform, useMotionValue, useMotionValueEvent } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, Quote } from "lucide-react";
 import Image from "next/image";
 
@@ -50,205 +50,319 @@ const testimonials = [
 
 export default function Testimonials() {
   const [current, setCurrent] = useState(0);
-  const [direction, setDirection] = useState(1);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Track max scroll progress reached so far using a MotionValue
+  const maxScrollProgress = useMotionValue(0);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    if (latest > maxScrollProgress.get()) {
+      maxScrollProgress.set(latest);
+    }
+  });
+
+  // Bind transforms to the monotonically increasing maxScrollProgress
+  const flapRotateX = useTransform(maxScrollProgress, [0.05, 0.25], [0, 180]);
+  const envelopeOpacity = useTransform(maxScrollProgress, [0.55, 0.75], [1, 0]);
+  const envelopeY = useTransform(maxScrollProgress, [0.55, 0.75], [0, 150]);
+
+  const cardsY = useTransform(maxScrollProgress, [0.15, 0.55], [250, 0]);
+  const cardsScale = useTransform(maxScrollProgress, [0.15, 0.55], [0.5, 1]);
+  const cardsOpacity = useTransform(maxScrollProgress, [0.15, 0.45], [0, 1]);
+  const navOpacity = useTransform(maxScrollProgress, [0.45, 0.55], [0, 1]);
+
+  const lastWheelTime = useRef(0);
 
   const next = useCallback(() => {
-    setDirection(1);
     setCurrent((c) => (c + 1) % testimonials.length);
   }, []);
 
-  const prev = () => {
-    setDirection(-1);
+  const prev = useCallback(() => {
     setCurrent((c) => (c - 1 + testimonials.length) % testimonials.length);
-  };
+  }, []);
+
+  const handleWheel = useCallback((e: React.WheelEvent<HTMLDivElement>) => {
+    const now = Date.now();
+    if (now - lastWheelTime.current < 400) return;
+
+    // Detect horizontal swipe (deltaX is dominant and exceeds threshold)
+    if (Math.abs(e.deltaX) > 15 && Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
+      if (e.deltaX > 0) {
+        next();
+      } else {
+        prev();
+      }
+      lastWheelTime.current = now;
+    }
+  }, [next, prev]);
 
   useEffect(() => {
-    const timer = setInterval(next, 6000);
+    const timer = setInterval(next, 7000);
     return () => clearInterval(timer);
   }, [next]);
 
-  const t = testimonials[current];
+  const getCardStyles = (index: number) => {
+    let diff = index - current;
+    
+    // Shortest circular path
+    const half = testimonials.length / 2;
+    if (diff > half) {
+      diff -= testimonials.length;
+    } else if (diff < -half) {
+      diff += testimonials.length;
+    }
+
+    const isActive = diff === 0;
+    const isLeft = diff < 0;
+    const isRight = diff > 0;
+
+    let x = "0%";
+    let scale = 1;
+    let rotateY = 0;
+    let z = 0;
+    let opacity = 1;
+
+    if (isActive) {
+      x = "0%";
+      scale = 1;
+      rotateY = 0;
+      z = 150;
+      opacity = 1;
+    } else if (isLeft) {
+      x = "-35%";
+      scale = 0.85;
+      rotateY = 25; // tilt inward
+      z = -100;
+      opacity = 0.35;
+    } else if (isRight) {
+      x = "35%";
+      scale = 0.85;
+      rotateY = -25; // tilt inward
+      z = -100;
+      opacity = 0.35;
+    } else {
+      // Behind background
+      x = diff > 0 ? "70%" : "-70%";
+      scale = 0.7;
+      rotateY = diff > 0 ? -45 : 45;
+      z = -250;
+      opacity = 0;
+    }
+
+    return {
+      x,
+      scale,
+      rotateY,
+      z,
+      opacity,
+      pointerEvents: isActive ? ("auto" as const) : ("none" as const),
+    };
+  };
 
   return (
-    <section className="py-24 lg:py-28 bg-white">
-      <div className="section-container">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 35, scale: 0.95, filter: "blur(10px)" }}
-          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-center max-w-2xl mx-auto mb-16"
-        >
-          <span className="inline-block px-4 py-1.5 rounded-full bg-violet-50 text-[#9FA1FF] text-xs font-semibold uppercase tracking-widest mb-4 border border-violet-100">
-            Testimonials
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0F172A] mb-4">
-            What Our Clients Say
-          </h2>
-          <p className="text-[#64748B] leading-relaxed">
-            Real results from businesses who scaled their operations with Digifore's IT solutions.
-          </p>
-        </motion.div>
+    <div ref={containerRef} className="h-[250vh] w-full relative">
+      <div 
+        onWheel={handleWheel}
+        className="sticky top-0 h-screen w-full flex flex-col justify-center items-center overflow-hidden bg-[#FAFAFA]"
+      >
+        
+        {/* Subtle background ambient mesh */}
+        <div className="absolute inset-0 bg-[radial-gradient(#E2E8F0_1px,transparent_1px)] [background-size:24px_24px] pointer-events-none opacity-50" />
 
-        {/* Main testimonial card */}
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.96, filter: "blur(12px)" }}
-          whileInView={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
-          className="max-w-4xl mx-auto"
-        >
-          <AnimatePresence mode="wait" custom={direction}>
-            <motion.div
-              key={current}
-              custom={direction}
-              initial={{ opacity: 0, x: 50 * direction, filter: "blur(4px)" }}
-              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, x: -50 * direction, filter: "blur(4px)" }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              className="grid md:grid-cols-[200px_1fr] lg:grid-cols-[240px_1fr] rounded-3xl bg-[#F8FAFC] border border-gray-100 overflow-hidden shadow-sm"
-            >
-              {/* Left — Photo */}
-              <div className="relative h-56 md:h-auto md:min-h-[280px] bg-gradient-to-br from-blue-50 to-violet-50">
-                <Image
-                  src={t.avatar}
-                  alt={t.name}
-                  fill
-                  className="object-cover"
-                  sizes="240px"
-                  unoptimized
-                />
-                {/* Overlay gradient on bottom for mobile */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[#F8FAFC] via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:to-[#F8FAFC]/20" />
-              </div>
+        <div className="section-container relative z-10 w-full max-w-6xl mx-auto px-6 sm:px-12 flex flex-col items-center">
+          
+          {/* Header */}
+          <div className="text-center max-w-2xl mx-auto mb-10 sm:mb-12">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-50 text-[#2563EB] text-xs font-bold uppercase tracking-widest mb-3 border border-blue-100/80 shadow-sm">
+              Testimonials
+            </span>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#0F172A] tracking-tight mb-3">
+              What Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-600">Clients Say</span>
+            </h2>
+            <p className="text-[#64748B] text-xs sm:text-sm leading-relaxed font-medium">
+              Real results from businesses who scaled their operations with Digifore's IT solutions.
+            </p>
+          </div>
 
-              {/* Right — Content */}
-              <div className="p-7 sm:p-8 lg:p-10 flex flex-col justify-center relative">
-                {/* Quote decoration */}
-                <Quote
-                  size={48}
-                  className="absolute top-6 right-6 text-violet-100/60 rotate-180"
-                  fill="currentColor"
-                />
+          {/* 3D Stack Slider Container */}
+          <div 
+            className="relative max-w-5xl w-full mx-auto h-[460px] sm:h-[400px] md:h-[360px] flex items-center justify-center"
+            style={{ perspective: "1200px", transformStyle: "preserve-3d" }}
+          >
+            {/* Envelope Back */}
+            <motion.div 
+              style={{ 
+                opacity: envelopeOpacity, 
+                y: envelopeY,
+                transform: "translateZ(-300px)",
+              }}
+              className="absolute bottom-[-100px] sm:bottom-[-60px] w-[95vw] max-w-[800px] h-[340px] bg-[#E2E8F0] rounded-b-[40px] border border-slate-300 pointer-events-none"
+            />
 
-                {/* Stars */}
-                <div className="flex gap-1 mb-4">
-                  {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star
-                      key={i}
-                      size={16}
-                      className="text-amber-400"
-                      fill="currentColor"
-                    />
-                  ))}
-                </div>
+            {testimonials.map((t, i) => {
+              const styles = getCardStyles(i);
+              const isActive = i === current;
 
-                {/* Review */}
-                <blockquote className="text-base sm:text-lg text-[#0F172A] leading-relaxed font-medium mb-6 relative z-10">
-                  &ldquo;{t.review}&rdquo;
-                </blockquote>
-
-                {/* Author info */}
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-white shadow-sm flex-shrink-0">
-                    <Image
-                      src={t.avatar}
-                      alt={t.name}
-                      width={40}
-                      height={40}
-                      className="object-cover w-full h-full"
-                      unoptimized
-                    />
-                  </div>
-                  <div>
-                    <div className="text-sm font-bold text-[#0F172A]">{t.name}</div>
-                    <div className="text-xs text-[#64748B]">
-                      {t.position} · {t.company}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Navigation */}
-          <div className="flex items-center justify-between mt-8">
-            {/* Avatar pills — shows all reviewers */}
-            <div className="hidden sm:flex items-center gap-2">
-              {testimonials.map((person, i) => (
-                <button
-                  key={person.id}
-                  onClick={() => {
-                    setDirection(i > current ? 1 : -1);
-                    setCurrent(i);
+              return (
+                <motion.div
+                  key={t.id}
+                  style={{
+                    y: cardsY,
+                    scale: cardsScale,
+                    opacity: cardsOpacity,
+                    transformStyle: "preserve-3d",
                   }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 ${
-                    i === current
-                      ? "bg-violet-50 border-violet-200"
-                      : "bg-white border-gray-100 hover:border-gray-200"
-                  }`}
+                  className="absolute w-full h-full flex justify-center items-center pointer-events-none"
                 >
-                  <div className="w-6 h-6 rounded-full overflow-hidden flex-shrink-0">
-                    <Image
-                      src={person.avatar}
-                      alt={person.name}
-                      width={24}
-                      height={24}
-                      className="object-cover w-full h-full"
-                      unoptimized
-                    />
-                  </div>
-                  <span
-                    className={`text-xs font-medium whitespace-nowrap ${
-                      i === current ? "text-[#9FA1FF]" : "text-[#64748B]"
+                  <motion.div
+                    style={{
+                      pointerEvents: styles.pointerEvents,
+                    }}
+                    animate={{
+                      x: styles.x,
+                      scale: styles.scale,
+                      rotateY: styles.rotateY,
+                      z: styles.z,
+                      opacity: styles.opacity,
+                    }}
+                    transition={{
+                      type: "spring",
+                      stiffness: 80,
+                      damping: 18,
+                      mass: 0.9,
+                    }}
+                    onClick={() => !isActive && setCurrent(i)}
+                    className={`absolute w-[90%] max-w-[640px] bg-white border border-slate-100 rounded-[32px] p-6 sm:p-10 md:p-12 shadow-[0_20px_50px_-20px_rgba(0,0,0,0.06)] hover:shadow-2xl hover:border-blue-100 transition-shadow duration-300 flex flex-col justify-between cursor-pointer ${
+                      isActive ? "shadow-[0_30px_70px_-20px_rgba(0,0,0,0.12)] border-blue-50/50" : ""
                     }`}
                   >
-                    {person.name.split(" ")[0]}
-                  </span>
-                </button>
-              ))}
-            </div>
+                    {/* Quote Decorative Icon */}
+                    <Quote
+                      size={64}
+                      className={`absolute top-6 right-6 text-slate-50 rotate-180 pointer-events-none transition-colors duration-500 ${
+                        isActive ? "text-blue-50/40" : ""
+                      }`}
+                      fill="currentColor"
+                    />
 
-            {/* Mobile dots */}
-            <div className="flex sm:hidden gap-2">
-              {testimonials.map((_, i) => (
+                    <div className="relative z-10 flex-1 flex flex-col justify-between">
+                      {/* Rating Stars */}
+                      <div className="flex gap-1.5 mb-6">
+                        {Array.from({ length: t.rating }).map((_, idx) => (
+                          <Star
+                            key={idx}
+                            size={18}
+                            className="text-amber-400"
+                            fill="currentColor"
+                          />
+                        ))}
+                      </div>
+
+                      {/* Quote Review */}
+                      <blockquote className="text-base sm:text-lg lg:text-xl text-[#1E293B] leading-relaxed font-semibold mb-6">
+                        &ldquo;{t.review}&rdquo;
+                      </blockquote>
+
+                      {/* Profile info */}
+                      <div className="flex items-center gap-4 border-t border-slate-50 pt-6">
+                        <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white shadow-md flex-shrink-0 relative bg-gradient-to-br from-blue-100 to-indigo-100 flex items-center justify-center font-bold text-blue-600 text-sm">
+                          {t.avatar ? (
+                            <Image
+                              src={t.avatar}
+                              alt={t.name}
+                              width={48}
+                              height={48}
+                              className="object-cover w-full h-full"
+                              unoptimized
+                            />
+                          ) : (
+                            t.name.split(" ").map((n) => n[0]).join("")
+                          )}
+                        </div>
+                        <div>
+                          <div className="text-sm sm:text-base font-black text-[#0F172A]">{t.name}</div>
+                          <div className="text-xs sm:text-sm font-semibold text-slate-500">
+                            {t.position} <span className="text-blue-600">·</span> {t.company}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
+
+            {/* Envelope Front Group */}
+            <motion.div
+              style={{
+                opacity: envelopeOpacity,
+                y: envelopeY,
+                transform: "translateZ(300px)",
+              }}
+              className="absolute bottom-[-100px] sm:bottom-[-60px] w-[95vw] max-w-[800px] h-[340px] pointer-events-none"
+            >
+              {/* Flap */}
+              <motion.div
+                style={{
+                  rotateX: flapRotateX,
+                  transformOrigin: "top",
+                  clipPath: "polygon(0 0, 50% 100%, 100% 0)",
+                }}
+                className="absolute top-0 left-0 w-full h-[220px] bg-[#CBD5E1]"
+              />
+              {/* Pocket */}
+              <div 
+                style={{ clipPath: "polygon(0 100%, 0 0, 50% 65%, 100% 0, 100% 100%)" }}
+                className="absolute inset-0 bg-[#F1F5F9] shadow-[0_-20px_40px_rgba(0,0,0,0.06)] rounded-b-[40px] border-t border-white"
+              />
+            </motion.div>
+          </div>
+
+          {/* Navigation arrow buttons at the bottom */}
+          <motion.div 
+            style={{ opacity: navOpacity }}
+            className="flex justify-center gap-4 mt-6 sm:mt-10"
+          >
+            <button
+              onClick={prev}
+              className="w-12 h-12 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center text-slate-500 hover:border-blue-400 hover:text-blue-600 hover:shadow-lg hover:shadow-blue-500/5 active:scale-95 transition-all duration-300"
+              aria-label="Previous testimonial"
+            >
+              <ChevronLeft size={20} strokeWidth={2.5} />
+            </button>
+            
+            {/* Visual dots indicator */}
+            <div className="flex items-center gap-2 px-2">
+              {testimonials.map((_, idx) => (
                 <button
-                  key={i}
-                  onClick={() => {
-                    setDirection(i > current ? 1 : -1);
-                    setCurrent(i);
-                  }}
+                  key={idx}
+                  onClick={() => setCurrent(idx)}
                   className={`rounded-full transition-all duration-300 ${
-                    i === current
-                      ? "w-6 h-2.5 bg-[#9FA1FF]"
-                      : "w-2.5 h-2.5 bg-gray-200"
+                    idx === current
+                      ? "w-8 h-2.5 bg-blue-600"
+                      : "w-2.5 h-2.5 bg-slate-200 hover:bg-slate-300"
                   }`}
-                  aria-label={`Go to testimonial ${i + 1}`}
+                  aria-label={`Go to testimonial ${idx + 1}`}
                 />
               ))}
             </div>
 
-            {/* Arrows */}
-            <div className="flex gap-2">
-              <button
-                onClick={prev}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#B5BAFF] hover:text-[#2563EB] transition-all shadow-sm"
-                aria-label="Previous testimonial"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                onClick={next}
-                className="w-10 h-10 rounded-xl bg-white border border-gray-200 flex items-center justify-center text-[#64748B] hover:border-[#B5BAFF] hover:text-[#2563EB] transition-all shadow-sm"
-                aria-label="Next testimonial"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
-        </motion.div>
+            <button
+              onClick={next}
+              className="w-12 h-12 rounded-2xl bg-white border border-slate-200/80 flex items-center justify-center text-slate-500 hover:border-blue-400 hover:text-blue-600 hover:shadow-lg hover:shadow-blue-500/5 active:scale-95 transition-all duration-300"
+              aria-label="Next testimonial"
+            >
+              <ChevronRight size={20} strokeWidth={2.5} />
+            </button>
+          </motion.div>
+
+        </div>
       </div>
-    </section>
+    </div>
   );
 }
