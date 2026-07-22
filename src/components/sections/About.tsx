@@ -60,7 +60,7 @@ const coreValues = [
   { icon: TrendingUp, title: "Elite Quality", desc: "We adhere to strict coding standards to deliver clean and secure codebases.", gradient: "from-cyan-500 to-blue-600 shadow-cyan-500/20" },
 ];
 
-const containerVariants = {
+const containerVariants: any = {
   hidden: {},
   show: {
     transition: {
@@ -69,7 +69,7 @@ const containerVariants = {
   }
 };
 
-const itemVariants = {
+const itemVariants: any = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 100, damping: 15 } }
 };
